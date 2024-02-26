@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 17:25:47 by jmertane          #+#    #+#             */
-/*   Updated: 2024/02/26 08:14:00 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/02/26 19:19:33 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	print_message(int id, t_ul msec, t_state flg)
 	if (flg == ST_TAKE)
 		printf("%s%-5lu %s%d %s%shas taken fork\n%s",
 			P, msec, CB, id, T, G, T);
-	else if (flg == ST_EATING)
+	else if (flg == ST_EAT)
 		printf("%s%-5lu %s%d %s%sis eating\n%s",
 			P, msec, CB, id, T, G, T);
 	else if (flg == ST_SLEEP)
@@ -37,7 +37,7 @@ void	log_status(t_philo *phil, t_state flg)
 		|| process_error(phil->data))
 		return ;
 	operate_mutex(&phil->data->mutex[MX_LOG], OP_LOCK, phil->data);
-	print_message(phil->id, phil->data->start, flg);
+	print_message(phil->id, phil->timer, flg);
 	operate_mutex(&phil->data->mutex[MX_LOG], OP_UNLOCK, phil->data);
 }
 

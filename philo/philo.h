@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 20:38:07 by jmertane          #+#    #+#             */
-/*   Updated: 2024/02/26 08:13:38 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/02/26 19:20:13 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ typedef unsigned long	t_ul;
 
 # define MTX_NUM	5
 # define STAT_NUM	3
-# define ST_PH_N	3
+# define PHIL_NUM	3
 
 typedef enum e_check
 {
@@ -76,7 +76,7 @@ typedef enum e_status
 
 typedef enum e_state
 {
-	ST_EATING,
+	ST_EAT,
 	ST_FULL,
 	ST_DEATH,
 	ST_TAKE,
@@ -110,7 +110,7 @@ typedef struct s_philo
 {
 	int			id;
 	int			meals;
-	bool		*stat[ST_PH_N];
+	bool		*stat[PHIL_NUM];
 	t_ul		timer;
 	pthread_t	tid;
 	t_mtx		*f1;
@@ -126,7 +126,7 @@ typedef struct s_data
 	t_mtx		mutex[MTX_NUM];
 	bool		stat[STAT_NUM];
 	void		*(*fn)(void *);
-	t_ul		start;
+	t_ul		uptime;
 }	t_data;
 
 int		valid_args(int ac, char **av);
@@ -139,12 +139,12 @@ void	operate_thread(pthread_t *tid, t_operator opr, t_data *data, void *p);
 int		log_usage(int errcode);
 void	log_status(t_philo *phil, t_state flg);
 int		log_error(int errcode, char *s1, char *s2, char *s3);
-void	mutate_status(t_mtx *mutex, bool *dst, bool val, t_data *data);
-bool	access_status(t_mtx *mutex, bool *val, t_data *data);
-void	mutate_timer(t_mtx *mutex, t_ul *dst, t_ul val, t_data *data);
-t_ul	access_timer(t_mtx *mutex, t_ul *val, t_data *data);
-t_ul	update_timer(t_operator opr, t_data *data);
-void	percision_sleep(long goal, t_data *data);
+void	set_status(t_mtx *mutex, bool *dst, bool val, t_data *data);
+bool	get_status(t_mtx *mutex, bool *val, t_data *data);
+void	set_timer(t_mtx *mutex, t_ul *dst, t_ul val, t_data *data);
+t_ul	get_timer(t_mtx *mutex, t_ul *val, t_data *data);
+t_ul	update_time(t_operator opr, t_data *data);
+void	percision_sleep(t_ul goal, t_data *data);
 int		free_mem(int errcode, t_data *data, char *msg);
 void	synchronize_threads(t_data *data);
 void	spinlock_threads(t_data *data);

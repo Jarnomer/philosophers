@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 13:35:15 by jmertane          #+#    #+#             */
-/*   Updated: 2024/02/26 08:10:27 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/02/26 19:18:32 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,6 @@ int	process_manager(t_data *data)
 		return (destroy_mutexes(data));
 	if (init_threads(data) != SUCCESS)
 		return (join_threads(data));
-	mutate_timer(&data->mutex[MX_TIME], &data->start,
-		update_timer(OP_MSEC, data), data);
 	synchronize_threads(data);
 	join_threads(data);
 	destroy_mutexes(data);

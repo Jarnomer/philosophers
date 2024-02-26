@@ -6,24 +6,24 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 19:22:38 by jmertane          #+#    #+#             */
-/*   Updated: 2024/02/26 08:09:36 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/02/26 19:19:55 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static inline long	gettime(long start, t_data *data)
+static inline t_ul	gettime(t_ul start, t_data *data)
 {
-	return (update_timer(OP_USEC, data) - start);
+	return (update_time(OP_USEC, data) - start);
 }
 
-void	percision_sleep(long target, t_data *data)
+void	percision_sleep(t_ul target, t_data *data)
 {
 	long	start;
 	long	remain;
 
 	target *= 1e3;
-	start = update_timer(OP_USEC, data);
+	start = update_time(OP_USEC, data);
 	while (gettime(start, data) < target)
 	{
 		if (process_finished(data)
@@ -66,7 +66,7 @@ static void	handler(int stat, t_operator opr, t_data *data)
 	}
 }
 
-t_ul	update_timer(t_operator opr, t_data *data)
+t_ul	update_time(t_operator opr, t_data *data)
 {
 	struct timeval	tp;
 
