@@ -6,7 +6,7 @@
 #    By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/22 12:17:02 by jmertane          #+#    #+#              #
-#    Updated: 2024/02/24 15:43:07 by jmertane         ###   ########.fr        #
+#    Updated: 2024/02/25 20:50:23 by jmertane         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,10 +35,14 @@ SLEEP		:=	sleep .20
 FILES		:=	main \
 				valid \
 				init \
-				simu \
-				dine \
-				util \
-				oper \
+				manager \
+				monitor \
+				mutexop \
+				threadop \
+				synchro \
+				mutacc \
+				timer \
+				logger \
 				error
 
 BONUS		:=	$(EMPTY)

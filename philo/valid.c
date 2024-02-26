@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 19:11:28 by jmertane          #+#    #+#             */
-/*   Updated: 2024/02/23 08:17:27 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/02/25 17:44:51 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ long	custom_atol(const char *str)
 	return (num * sgn);
 }
 
-static int	valid_characters(const char *str)
+static int	valid_chars(const char *str)
 {
 	int	i;
 
@@ -55,14 +55,18 @@ static int	valid_characters(const char *str)
 	return (SUCCESS);
 }
 
-int	valid_arguments(int ac, char **av)
+int	valid_args(int ac, char **av)
 {
 	while (--ac != 0)
 	{
-		if (valid_characters(av[ac]) == FAILURE
+		if (valid_chars(av[ac]) == FAILURE
 			|| custom_atol(av[ac]) == FAILURE)
-			return (error_logger(EINVAL,
+			return (log_error(EINVAL,
 					av[ac], ": ", MSG_ARGV));
 	}
+	if ((ac == 6 && !custom_atol(av[ac - 1]))
+		|| !custom_atol(av[1]))
+		return (log_error(EINVAL,
+				MSG_CNT, "", ""));
 	return (SUCCESS);
 }
