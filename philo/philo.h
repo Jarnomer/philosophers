@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 20:38:07 by jmertane          #+#    #+#             */
-/*   Updated: 2024/02/27 17:59:45 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/02/27 18:12:04 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ void	percision_sleep(t_ul goal, t_data *data);
 void	threads_synchronized(t_data *data);
 void	threads_spinlocked(t_data *data);
 bool	process_finished(t_data *data);
-bool	process_error(t_data *data);
+bool	process_failed(t_data *data);
 void	error_occured(t_data *data, int errcode);
 int		free_mem(int errcode, t_data *data, char *msg);
 

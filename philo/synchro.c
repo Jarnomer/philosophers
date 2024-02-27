@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 17:25:22 by jmertane          #+#    #+#             */
-/*   Updated: 2024/02/27 17:58:46 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/02/27 18:12:24 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ bool	process_finished(t_data *data)
 			&data->stat[ST_DONE], data));
 }
 
-bool	process_error(t_data *data)
+bool	process_failed(t_data *data)
 {
 	return (get_status(&data->mutex[MX_ERR],
 			&data->stat[ST_ERR], data));

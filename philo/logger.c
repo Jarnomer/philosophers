@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 17:25:47 by jmertane          #+#    #+#             */
-/*   Updated: 2024/02/27 17:29:25 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/02/27 18:12:48 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	log_status(t_philo *phil, t_state state)
 	t_ul	elapsed;
 
 	data = phil->data;
-	if (process_finished(data) || process_error(data))
+	if (process_finished(data) || process_failed(data))
 		return ;
 	operate_mutex(&phil->data->mutex[MX_LOG], OP_LOCK, data);
 	set_timer(&data->mutex[MX_TIME], &elapsed,

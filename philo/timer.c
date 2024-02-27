@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 19:22:38 by jmertane          #+#    #+#             */
-/*   Updated: 2024/02/27 16:41:01 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/02/27 18:12:17 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	percision_sleep(t_ul target, t_data *data)
 	while (gettime(start, data) < target)
 	{
 		if (process_finished(data)
-			|| process_error(data))
+			|| process_failed(data))
 			break ;
 		remain = target - gettime(start, data);
 		if (remain > 1e5)
@@ -71,7 +71,7 @@ t_ul	update_time(t_operator opr, t_data *data)
 	struct timeval	tp;
 
 	handler(gettimeofday(&tp, NULL), opr, data);
-	if (process_finished(data) || process_error(data))
+	if (process_finished(data) || process_failed(data))
 		return (ULONG_MAX);
 	else if (opr == OP_MSEC)
 		return ((tp.tv_sec * 1e3) + (tp.tv_usec / 1e3));
