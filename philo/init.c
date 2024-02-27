@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 20:18:59 by jmertane          #+#    #+#             */
-/*   Updated: 2024/02/25 18:42:43 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/02/27 16:59:47 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ int	init_data(t_data *data, int ac, char **av)
 	if (!data->phils || !data->forks)
 		return (free_mem(ENOMEM, data, MSG_MEM));
 	init_philosophers(data, cnt);
-	data->fn = &process_monitor;
+	data->fn = &process_routine;
+	data->mn = &process_monitor;
+	data->excode = SUCCESS;
 	return (SUCCESS);
 }

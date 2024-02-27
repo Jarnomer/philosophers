@@ -6,39 +6,44 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 17:25:47 by jmertane          #+#    #+#             */
-/*   Updated: 2024/02/26 19:19:33 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/02/27 17:29:25 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	print_message(int id, t_ul msec, t_state flg)
+static void	print_message(int id, t_ul time, t_state state)
 {
-	if (flg == ST_TAKE)
+	if (state == ST_TAKE)
 		printf("%s%-5lu %s%d %s%shas taken fork\n%s",
-			P, msec, CB, id, T, G, T);
-	else if (flg == ST_EAT)
+			P, time, CB, id, T, G, T);
+	else if (state == ST_EAT)
 		printf("%s%-5lu %s%d %s%sis eating\n%s",
-			P, msec, CB, id, T, G, T);
-	else if (flg == ST_SLEEP)
+			P, time, CB, id, T, G, T);
+	else if (state == ST_SLEEP)
 		printf("%s%-5lu %s%d %s%sis sleeping\n%s",
-			P, msec, CB, id, T, G, T);
-	else if (flg == ST_THINK)
+			P, time, CB, id, T, G, T);
+	else if (state == ST_THINK)
 		printf("%s%-5lu %s%d %s%sis thinking\n%s",
-			P, msec, CB, id, T, G, T);
-	else if (flg == ST_DEATH)
+			P, time, CB, id, T, G, T);
+	else if (state == ST_DEATH)
 		printf("%s%-5lu %s%d %sdied\n%s",
-			P, msec, CB, id, RB, T);
+			P, time, CB, id, RB, T);
 }
 
-void	log_status(t_philo *phil, t_state flg)
+void	log_status(t_philo *phil, t_state state)
 {
-	if (process_finished(phil->data)
-		|| process_error(phil->data))
+	t_data	*data;
+	t_ul	elapsed;
+
+	data = phil->data;
+	if (process_finished(data) || process_error(data))
 		return ;
-	operate_mutex(&phil->data->mutex[MX_LOG], OP_LOCK, phil->data);
-	print_message(phil->id, phil->timer, flg);
-	operate_mutex(&phil->data->mutex[MX_LOG], OP_UNLOCK, phil->data);
+	operate_mutex(&phil->data->mutex[MX_LOG], OP_LOCK, data);
+	set_timer(&data->mutex[MX_TIME], &elapsed,
+		update_time(OP_MSEC, data) - data->start, data);
+	print_message(phil->id, elapsed, state);
+	operate_mutex(&phil->data->mutex[MX_LOG], OP_UNLOCK, data);
 }
 
 int	log_usage(int errcode)

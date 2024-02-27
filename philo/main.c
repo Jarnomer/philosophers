@@ -23,6 +23,6 @@ int	main(int argc, char **argv)
 	if (init_data(&data, argc, argv) != SUCCESS)
 		return (ENOMEM);
 	if (process_manager(&data) != SUCCESS)
-		return (free_mem(EXIT_FAILURE, &data, NULL));
-	return (free_mem(SUCCESS, &data, NULL));
+		return (data.excode);
+	return (EXIT_SUCCESS);
 }

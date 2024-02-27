@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 19:22:38 by jmertane          #+#    #+#             */
-/*   Updated: 2024/02/26 19:19:55 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/02/27 16:41:01 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ void	percision_sleep(t_ul target, t_data *data)
 			|| process_error(data))
 			break ;
 		remain = target - gettime(start, data);
-		if (remain > 1500)
-			usleep(remain / 2);
+		if (remain > 1e5)
+			usleep(remain / 3);
 		else
 			while (gettime(start, data) < target)
 				true ;
@@ -57,12 +57,12 @@ static void	handler(int stat, t_operator opr, t_data *data)
 	if (msg != NULL)
 	{
 		log_error(FAILURE, MSG_SYSC, "<gettimeofday>: ", msg);
-		error_occured(data);
+		error_occured(data, stat);
 	}
 	else if (opr != OP_MSEC && opr != OP_USEC)
 	{
 		log_error(FAILURE, MSG_OPER, "<gettimeofday>", "");
-		error_occured(data);
+		error_occured(data, EXIT_FAILURE);
 	}
 }
 

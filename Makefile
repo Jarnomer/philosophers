@@ -6,7 +6,7 @@
 #    By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/22 12:17:02 by jmertane          #+#    #+#              #
-#    Updated: 2024/02/25 20:50:23 by jmertane         ###   ########.fr        #
+#    Updated: 2024/02/27 17:05:49 by jmertane         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,12 +36,13 @@ FILES		:=	main \
 				valid \
 				init \
 				manager \
+				routine \
 				monitor \
-				mutexop \
-				threadop \
-				synchro \
-				mutacc \
+				opmutex \
+				opthread \
 				timer \
+				getset \
+				synchro \
 				logger \
 				error
 

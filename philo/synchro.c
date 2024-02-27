@@ -37,8 +37,11 @@ bool	process_error(t_data *data)
 			&data->stat[ST_ERR], data));
 }
 
-void	error_occured(t_data *data)
+void	error_occured(t_data *data, int errcode)
 {
-	set_status(&data->mutex[MX_ERR],
-		&data->stat[ST_ERR], true, data);
+	operate_mutex(&data->mutex[MX_ERR], OP_LOCK, data);
+	data->stat[ST_ERR] = true;
+	if (data->excode == SUCCESS)
+		data->excode = errcode;
+	operate_mutex(&data->mutex[MX_ERR], OP_UNLOCK, data);
 }
