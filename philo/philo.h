@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 20:38:07 by jmertane          #+#    #+#             */
-/*   Updated: 2024/02/27 17:33:09 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/02/27 17:59:45 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,8 +152,8 @@ void	set_timer(t_mtx *mutex, t_ul *dst, t_ul val, t_data *data);
 t_ul	get_timer(t_mtx *mutex, t_ul *val, t_data *data);
 t_ul	update_time(t_operator opr, t_data *data);
 void	percision_sleep(t_ul goal, t_data *data);
-void	synchronize_threads(t_data *data);
-void	spinlock_threads(t_data *data);
+void	threads_synchronized(t_data *data);
+void	threads_spinlocked(t_data *data);
 bool	process_finished(t_data *data);
 bool	process_error(t_data *data);
 void	error_occured(t_data *data, int errcode);

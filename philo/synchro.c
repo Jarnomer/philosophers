@@ -6,19 +6,19 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 17:25:22 by jmertane          #+#    #+#             */
-/*   Updated: 2024/02/26 19:19:05 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/02/27 17:58:46 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	synchronize_threads(t_data *data)
+void	threads_synchronized(t_data *data)
 {
 	set_status(&data->mutex[MX_SYNC],
 		&data->stat[ST_SYNC], true, data);
 }
 
-void	spinlock_threads(t_data *data)
+void	threads_spinlocked(t_data *data)
 {
 	while (!get_status(&data->mutex[MX_SYNC],
 			&data->stat[ST_SYNC], data))
