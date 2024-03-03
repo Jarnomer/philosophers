@@ -6,13 +6,13 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 14:54:47 by jmertane          #+#    #+#             */
-/*   Updated: 2024/02/27 16:32:01 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/02/29 08:23:05 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static char	*errno_msg(int stat, t_operator opr)
+static char	*err_msg(int stat, t_operator opr)
 {
 	if (stat == EINVAL && (opr == OP_LOCK || opr == OP_UNLOCK))
 		return ("Mutex has not been properly initialized.\n");
@@ -25,28 +25,23 @@ static char	*errno_msg(int stat, t_operator opr)
 	return (NULL);
 }
 
-static char	*func_name(t_operator opr)
+static char	*fn_name(t_operator opr)
 {
-	if (opr == OP_INIT)
-		return ("<pthread_mutex_init>: ");
-	else if (opr == OP_LOCK)
+	if (opr == OP_LOCK)
 		return ("<pthread_mutex_lock>: ");
 	else if (opr == OP_UNLOCK)
 		return ("<pthread_mutex_unlock>: ");
+	else if (opr == OP_INIT)
+		return ("<pthread_mutex_init>: ");
 	else
 		return ("<pthread_mutex_destroy>: ");
 }
 
 static void	handler(int stat, t_operator opr, t_data *data)
 {
-	char	*fn;
-	char	*msg;
-
-	fn = func_name(opr);
-	msg = errno_msg(stat, opr);
-	if (msg != NULL)
+	if (stat != SUCCESS)
 	{
-		log_error(FAILURE, MSG_SYSC, fn, msg);
+		log_error(FAILURE, MSG_SYSC, fn_name(opr), err_msg(stat, opr));
 		error_occured(data, stat);
 	}
 }

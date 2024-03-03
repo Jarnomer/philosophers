@@ -26,7 +26,7 @@ DEBUGFLG	:=	.debug
 RM			:=	rm -rf
 AR			:=	ar -rcs
 CC			:=	cc
-CFLAGS		:=	-Wall -Werror -Wextra -pthread -g
+CFLAGS		:=	-Wall -Werror -Wextra -pthread -g -fsanitize=thread
 DEBUGFLAGS	=	-g -fsanitize=address
 DEPFLAGS	=	-c -MT $@ -MMD -MP -MF $(DEPSDIR)$*.d
 SCREENCLR	:=	printf "\033c"
@@ -75,50 +75,50 @@ Y			=	\033[33m	# yellow
 all: $(NAME)
 $(NAME): $(OBJS)
 	@$(CC) $(CFLAGS) $^ -o $(SRCSDIR)$@
-	@echo "$(G)$(B)\n$(F)$(C)\nFINISHED!$(T)\n" && $(SLEEP)
-	@echo "$(V)Compiled $(G)$(CNTR)$(V) object file(s).$(T)\n"
-	@echo "$(V)Using compiler $(G)$(CC)$(V) with flags: $(G)$(CFLAGS)$(T)\n"
-	@echo "$(V)Successfully compiled binary: $(G)$(B)$2$(T)\n"
+	@printf "$(G)$(B)\n$(F)$(C)\nFINISHED!$(T)\n" && $(SLEEP)
+	@printf "$(V)Compiled $(G)$(CNTR)$(V) object file(s).$(T)\n"
+	@printf "$(V)Using compiler $(G)$(CC)$(V) with flags: $(G)$(CFLAGS)$(T)\n"
+	@printf "$(V)Successfully compiled binary: $(G)$(B)$2$(T)\n"
 
 bonus: $(BONUSFLG)
 $(BONUSFLG): $(OBJS_BNS)
 	@$(CC) $(CFLAGS) $^ -o $(BONUSDIR)$(BONUSBIN) && touch $@
-	@echo "$(G)$(B)\n$(F)$(C)\nFINISHED!$(T)\n" && $(SLEEP)
-	@echo "$(V)Compiled $(G)$(CNTR)$(V) object file(s).$(T)\n"
-	@echo "$(V)Using compiler $(G)$(CC)$(V) with flags: $(G)$(CFLAGS)$(T)\n"
-	@echo "$(V)Successfully compiled binary: $(G)$(B)$(BONUSBIN)$(T)\n"
+	@printf "$(G)$(B)\n$(F)$(C)\nFINISHED!$(T)\n" && $(SLEEP)
+	@printf "$(V)Compiled $(G)$(CNTR)$(V) object file(s).$(T)\n"
+	@printf "$(V)Using compiler $(G)$(CC)$(V) with flags: $(G)$(CFLAGS)$(T)\n"
+	@printf "$(V)Successfully compiled binary: $(G)$(B)$(BONUSBIN)$(T)\n"
 
 debug: $(DEBUGFLG)
 $(DEBUGFLG): $(OBJS_DEBUG)
 	@$(CC) $(CFLAGS) $(DEBUGFLAGS) $^ -o $(SRCSDIR)$(DEBUGBIN) && touch $@
-	@echo "$(G)$(B)\n$(F)$(C)\nFINISHED!$(T)\n" && $(SLEEP)
-	@echo "$(V)Compiled $(G)$(CNTR)$(V) object file(s).$(T)\n"
-	@echo "$(V)Using compiler $(G)$(CC)$(V) with flags: $(G)$(CFLAGS) $(DEBUGFLAGS)$(T)\n"
-	@echo "$(V)Successfully compiled binary: $(G)$(B)$(DEBUGBIN)$(T)\n"
+	@printf "$(G)$(B)\n$(F)$(C)\nFINISHED!$(T)\n" && $(SLEEP)
+	@printf "$(V)Compiled $(G)$(CNTR)$(V) object file(s).$(T)\n"
+	@printf "$(V)Using compiler $(G)$(CC)$(V) with flags: $(G)$(CFLAGS) $(DEBUGFLAGS)$(T)\n"
+	@printf "$(V)Successfully compiled binary: $(G)$(B)$(DEBUGBIN)$(T)\n"
 
 $(OBJSDIR)%.o: %.c | $(OBJSDIR) $(DEPSDIR)
 	@if ! $(CC) $(CFLAGS) $(DEPFLAGS) $< -o $@ 2> $(ERRORTXT); then \
-		echo "$(R)$(B)\nMAKE TERMINATED!\n$(F)$(T)\n"; \
-		echo "$(V)Unable to create object file: $(R)$(B)$@$(T)\n"; \
-		echo "$(R)$(B)ERROR\t>>>>>>>>$(T)$(Y)\n"; sed '$$d' $(ERRORTXT); \
-		echo "$(R)$(B)\n$(F)\nExiting...$(T)\n"; exit 1 ; fi
+		printf "$(R)$(B)\nMAKE TERMINATED!\n$(F)$(T)\n"; \
+		printf "$(V)Unable to create object file: $(R)$(B)$@$(T)\n"; \
+		printf "$(R)$(B)ERROR\t>>>>>>>>$(T)$(Y)\n"; sed '$$d' $(ERRORTXT); \
+		printf "$(R)$(B)\n$(F)\nExiting...$(T)\n"; exit 1 ; fi
 	@if [ $(CNTR) ]; then \
 		$(eval CNTR=$(shell echo $$(($(CNTR)+1)))) \
-		echo "$(T)$(V) $<$(T)\t$(C)>>>>>>>>\t$(G)$(B)$@$(T)"; else \
-		echo "$(C)$(B)MAKE START!$(T)\n$(G)$(B)$(F)$(T)\n"; \
-		echo "$(T)$(V) $<$(T)\t$(C)>>>>>>>>\t$(G)$(B)$@$(T)"; fi
+		printf "$(T)$(V) $<$(T)\t$(C)>>>>>>>>\t$(G)$(B)$@$(T)"; else \
+		printf "$(C)$(B)MAKE START!$(T)\n$(G)$(B)$(F)$(T)\n"; \
+		printf "$(T)$(V) $<$(T)\t$(C)>>>>>>>>\t$(G)$(B)$@$(T)"; fi
 
 clean:
-	@$(SCREENCLR) && echo "$(C)$(B)\nCLEAN START!\n$(G)$(F)$(T)\n"
-	@echo "\n$(V)Removing object and dependency file(s) for $(G)$(B)$(NAME)$(T)\n"
+	@$(SCREENCLR) && printf "$(C)$(B)\nCLEAN START!\n$(G)$(F)$(T)\n"
+	@printf "\n$(V)Removing object and dependency file(s) for $(G)$(B)$(NAME)$(T)\n"
 	@$(RM) $(OBJSDIR) $(DEPSDIR) $(ERRORTXT) $(BONUSFLG) $(DEBUGFLG)
-	@echo "$(G)$(B)$(F)$(C)\nFINISHED!$(T)\n" && $(SLEEP)
+	@printf "$(G)$(B)$(F)$(C)\nFINISHED!$(T)\n" && $(SLEEP)
 
 fclean: clean
-	@echo "$(C)$(B)\nFCLEAN START!\n$(G)$(F)$(T)\n"
-	@echo "$(V)Removing all binary file(s) for $(G)$(B)$(NAME)$(T)"
+	@printf "$(C)$(B)\nFCLEAN START!\n$(G)$(F)$(T)\n"
+	@printf "$(V)Removing all binary file(s) for $(G)$(B)$(NAME)$(T)"
 	@$(RM) $(SRCSDIR)$(NAME) $(BONUSDIR)$(BONUSBIN) $(SRCSDIR)$(DEBUGBIN)
-	@echo "$(G)$(B)\n$(F)$(C)\nFINISHED!$(T)" && $(SLEEP)
+	@printf "$(G)$(B)\n$(F)$(C)\nFINISHED!$(T)" && $(SLEEP)
 
 re: fclean all
 

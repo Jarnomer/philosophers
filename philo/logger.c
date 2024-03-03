@@ -20,13 +20,13 @@ static void	print_message(int id, t_ul time, t_state state)
 	else if (state == ST_EAT)
 		printf("%s%-5lu %s%d %s%sis eating\n%s",
 			P, time, CB, id, T, G, T);
-	else if (state == ST_SLEEP)
+	else if (state == ST_SLP)
 		printf("%s%-5lu %s%d %s%sis sleeping\n%s",
 			P, time, CB, id, T, G, T);
-	else if (state == ST_THINK)
+	else if (state == ST_THK)
 		printf("%s%-5lu %s%d %s%sis thinking\n%s",
 			P, time, CB, id, T, G, T);
-	else if (state == ST_DEATH)
+	else if (state == ST_DIE)
 		printf("%s%-5lu %s%d %sdied\n%s",
 			P, time, CB, id, RB, T);
 }
@@ -34,16 +34,16 @@ static void	print_message(int id, t_ul time, t_state state)
 void	log_status(t_philo *phil, t_state state)
 {
 	t_data	*data;
-	t_ul	elapsed;
 
 	data = phil->data;
-	if (process_finished(data) || process_failed(data))
-		return ;
-	operate_mutex(&phil->data->mutex[MX_LOG], OP_LOCK, data);
-	set_timer(&data->mutex[MX_TIME], &elapsed,
-		update_time(OP_MSEC, data) - data->start, data);
-	print_message(phil->id, elapsed, state);
-	operate_mutex(&phil->data->mutex[MX_LOG], OP_UNLOCK, data);
+	operate_mutex(&data->mutex[MX_LOG], OP_LOCK, data);
+	if (!process_finished(data) && !process_failed(data))
+	{
+		set_timer(&data->mutex[MX_SYNC], &data->uptime,
+			update_time(OP_MSEC, data) - data->start, data);
+		print_message(phil->id, data->uptime, state);
+	}
+	operate_mutex(&data->mutex[MX_LOG], OP_UNLOCK, data);
 }
 
 int	log_usage(int errcode)

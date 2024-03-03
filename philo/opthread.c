@@ -6,13 +6,13 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 15:03:58 by jmertane          #+#    #+#             */
-/*   Updated: 2024/02/27 16:31:47 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/02/29 08:22:37 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static char	*errno_msg(int stat, t_operator opr)
+static char	*err_msg(int stat, t_operator opr)
 {
 	if (stat == ESRCH && (opr == OP_DETACH || opr == OP_JOIN))
 		return ("No thread with ID could be found.\n");
@@ -25,7 +25,7 @@ static char	*errno_msg(int stat, t_operator opr)
 	return (NULL);
 }
 
-static char	*func_name(t_operator opr)
+static char	*fn_name(t_operator opr)
 {
 	if (opr == OP_CREATE)
 		return ("<pthread_create>: ");
@@ -37,26 +37,29 @@ static char	*func_name(t_operator opr)
 
 static void	handler(int stat, t_operator opr, t_data *data)
 {
-	char	*fn;
-	char	*msg;
-
-	fn = func_name(opr);
-	msg = errno_msg(stat, opr);
-	if (msg != NULL)
+	if (stat != SUCCESS)
 	{
-		log_error(FAILURE, MSG_SYSC, fn, msg);
+		log_error(FAILURE, MSG_SYSC, fn_name(opr), err_msg(stat, opr));
 		error_occured(data, stat);
 	}
 }
 
 void	operate_thread(pthread_t *tid, t_operator opr, t_data *data, void *p)
 {
+	static int	i = 0;
+
 	if (opr == OP_CREATE)
-		handler(pthread_create(tid, NULL, data->fn, p), opr, data);
-	else if (opr == OP_DETACH)
-		handler(pthread_detach(*tid), opr, data);
+	{
+		if (i < data->input->philos)
+			handler(pthread_create(tid, NULL, data->fn, p), opr, data);
+		else
+			handler(pthread_create(tid, NULL, data->mn, p), opr, data);
+		alter_iterator(&data->mutex[MX_ITER], &i, true, data);
+	}
 	else if (opr == OP_JOIN)
 		handler(pthread_join(*tid, NULL), opr, data);
+	else if (opr == OP_DETACH)
+		handler(pthread_detach(*tid), opr, data);
 	else
 	{
 		log_error(FAILURE, MSG_OPER, "<operate_thread>", "");

@@ -26,19 +26,18 @@ void	percision_sleep(t_ul target, t_data *data)
 	start = update_time(OP_USEC, data);
 	while (gettime(start, data) < target)
 	{
-		if (process_finished(data)
-			|| process_failed(data))
+		if (process_finished(data) || process_failed(data))
 			break ;
 		remain = target - gettime(start, data);
 		if (remain > 1e5)
-			usleep(remain / 3);
+			usleep(remain / 2);
 		else
 			while (gettime(start, data) < target)
 				true ;
 	}
 }
 
-static char	*errno_msg(int stat)
+static char	*err_msg(int stat)
 {
 	if (stat == EFAULT)
 		return ("Pointer outside accessible address space.");
@@ -51,12 +50,9 @@ static char	*errno_msg(int stat)
 
 static void	handler(int stat, t_operator opr, t_data *data)
 {
-	char	*msg;
-
-	msg = errno_msg(stat);
-	if (msg != NULL)
+	if (stat != SUCCESS)
 	{
-		log_error(FAILURE, MSG_SYSC, "<gettimeofday>: ", msg);
+		log_error(FAILURE, MSG_SYSC, "<gettimeofday>: ", err_msg(stat));
 		error_occured(data, stat);
 	}
 	else if (opr != OP_MSEC && opr != OP_USEC)
@@ -71,7 +67,7 @@ t_ul	update_time(t_operator opr, t_data *data)
 	struct timeval	tp;
 
 	handler(gettimeofday(&tp, NULL), opr, data);
-	if (process_finished(data) || process_failed(data))
+	if (process_failed(data))
 		return (ULONG_MAX);
 	else if (opr == OP_MSEC)
 		return ((tp.tv_sec * 1e3) + (tp.tv_usec / 1e3));

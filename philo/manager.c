@@ -14,14 +14,22 @@
 
 static int	destroy_mutexes(t_data *data)
 {
-	int	i;
+	t_philo	*phil;
+	int		i;
+	int		j;
 
-	i = -1;
-	while (++i < data->input->philos)
-		operate_mutex(&data->forks[i], OP_DESTROY, data);
-	i = MTX_NUM;
-	while (--i >= 0)
-		operate_mutex(&data->mutex[i], OP_DESTROY, data);
+	i = 0;
+	while (i < data->input->philos)
+	{
+		j = 0;
+		phil = data->phils + i;
+		while (j < MTX_NUM_P)
+			operate_mutex(&phil->mutex[j++], OP_DESTROY, data);
+		operate_mutex(&data->forks[i++], OP_DESTROY, data);
+	}
+	i = 0;
+	while (i < MTX_NUM_D)
+		operate_mutex(&data->mutex[i++], OP_DESTROY, data);
 	if (data->stat[ST_ERR])
 		return (FAILURE);
 	return (SUCCESS);
@@ -38,6 +46,7 @@ static int	join_threads(t_data *data)
 		phil = data->phils + i++;
 		operate_thread(&phil->tid, OP_JOIN, data, NULL);
 	}
+	operate_thread(&data->tid, OP_DETACH, data, NULL);
 	destroy_mutexes(data);
 	free_mem(0, data, NULL);
 	if (data->stat[ST_ERR])
@@ -51,34 +60,35 @@ static int	init_threads(t_data *data)
 	int		i;
 
 	i = 0;
-	while (i < data->input->philos)
+	while (i < data->input->philos && !data->stat[ST_ERR])
 	{
 		phil = data->phils + i++;
 		operate_thread(&phil->tid, OP_CREATE, data, phil);
-		if (data->stat[ST_ERR])
-			return (FAILURE);
 	}
+	operate_thread(&data->tid, OP_CREATE, data, data);
+	if (data->stat[ST_ERR])
+		return (FAILURE);
 	return (SUCCESS);
 }
 
 static int	init_mutexes(t_data *data)
 {
 	int	i;
+	int	j;
 
 	i = 0;
-	while (i < MTX_NUM)
-	{
+	while (i < MTX_NUM_D && !data->stat[ST_ERR])
 		operate_mutex(&data->mutex[i++], OP_INIT, data);
-		if (data->stat[ST_ERR])
-			return (FAILURE);
-	}
 	i = 0;
-	while (i < data->input->philos)
+	while (i < data->input->philos && !data->stat[ST_ERR])
 	{
+		j = 0;
+		while (j < MTX_NUM_P && !data->stat[ST_ERR])
+			operate_mutex(&(data->phils + i)->mutex[j++], OP_INIT, data);
 		operate_mutex(&data->forks[i++], OP_INIT, data);
-		if (data->stat[ST_ERR])
-			return (FAILURE);
 	}
+	if (data->stat[ST_ERR])
+		return (FAILURE);
 	return (SUCCESS);
 }
 
@@ -86,11 +96,9 @@ int	process_manager(t_data *data)
 {
 	if (init_mutexes(data) != SUCCESS)
 		return (destroy_mutexes(data));
-	process_monitor(data);
 	if (init_threads(data) != SUCCESS)
 		return (join_threads(data));
-	set_timer(&data->mutex[MX_TIME], &data->start,
-		update_time(OP_MSEC, data), data);
+	data->start = update_time(OP_MSEC, data);
 	threads_synchronized(data);
 	return (join_threads(data));
 }
