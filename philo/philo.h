@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 20:38:07 by jmertane          #+#    #+#             */
-/*   Updated: 2024/02/28 19:52:40 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/03/04 18:12:09 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,17 @@ typedef unsigned long	t_ul;
 
 typedef enum e_check
 {
-	FAILURE = -1,
-	SUCCESS = 0,
+	FAILURE =	-1,
+	SUCCESS =	0,
 }	t_check;
 
 typedef enum e_mutex
 {
 	MX_ERR		= 0,
-	MX_DONE,
-	MX_LOG,
 	MX_SYNC,
+	MX_DONE,
 	MX_ITER,
+	MX_LOG,
 	MX_EAT		= 0,
 	MX_FULL,
 	MX_TIME
@@ -145,11 +145,11 @@ void	operate_thread(pthread_t *tid, t_operator opr, t_data *data, void *p);
 int		log_usage(int errcode);
 void	log_status(t_philo *phil, t_state state);
 int		log_error(int errcode, char *s1, char *s2, char *s3);
-void	alter_iterator(t_mtx *mutex, int *i, bool up, t_data *data);
-void	set_status(t_mtx *mutex, bool *dst, bool val, t_data *data);
-bool	get_status(t_mtx *mutex, bool *val, t_data *data);
-void	set_timer(t_mtx *mutex, t_ul *dst, t_ul val, t_data *data);
-t_ul	get_timer(t_mtx *mutex, t_ul *val, t_data *data);
+void	set_status(bool *dst, bool val, t_mtx *mutex, t_data *data);
+bool	get_status(bool *val, t_mtx *mutex, t_data *data);
+void	set_timer(t_ul *dst, t_ul val, t_mtx *mutex, t_data *data);
+t_ul	get_timer(t_ul *val, t_mtx *mutex, t_data *data);
+void	alter_iterator(int *i, t_mtx *mutex, t_data *data);
 t_ul	update_time(t_operator opr, t_data *data);
 void	percision_sleep(t_ul goal, t_data *data);
 void	threads_synchronized(t_data *data);

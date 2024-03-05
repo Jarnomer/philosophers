@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 19:22:38 by jmertane          #+#    #+#             */
-/*   Updated: 2024/02/27 18:12:17 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/03/04 20:05:27 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static char	*err_msg(int stat)
 	return (NULL);
 }
 
-static void	handler(int stat, t_operator opr, t_data *data)
+static void	wrapper(int stat, t_operator opr, t_data *data)
 {
 	if (stat != SUCCESS)
 	{
@@ -66,7 +66,7 @@ t_ul	update_time(t_operator opr, t_data *data)
 {
 	struct timeval	tp;
 
-	handler(gettimeofday(&tp, NULL), opr, data);
+	wrapper(gettimeofday(&tp, NULL), opr, data);
 	if (process_failed(data))
 		return (ULONG_MAX);
 	else if (opr == OP_MSEC)

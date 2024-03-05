@@ -6,7 +6,7 @@
 #    By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/22 12:17:02 by jmertane          #+#    #+#              #
-#    Updated: 2024/02/27 17:05:49 by jmertane         ###   ########.fr        #
+#    Updated: 2024/03/05 12:25:16 by jmertane         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,8 +26,8 @@ DEBUGFLG	:=	.debug
 RM			:=	rm -rf
 AR			:=	ar -rcs
 CC			:=	cc
-CFLAGS		:=	-Wall -Werror -Wextra -pthread -g -fsanitize=thread
-DEBUGFLAGS	=	-g -fsanitize=address
+CFLAGS		:=	-Wall -Werror -Wextra -pthread
+DEBUGFLAGS	=	-g -fsanitize=thread
 DEPFLAGS	=	-c -MT $@ -MMD -MP -MF $(DEPSDIR)$*.d
 SCREENCLR	:=	printf "\033c"
 SLEEP		:=	sleep .20

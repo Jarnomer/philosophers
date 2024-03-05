@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 15:03:58 by jmertane          #+#    #+#             */
-/*   Updated: 2024/02/29 08:22:37 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/03/04 18:12:35 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static char	*fn_name(t_operator opr)
 		return ("<pthread_join>: ");
 }
 
-static void	handler(int stat, t_operator opr, t_data *data)
+static void	wrapper(int stat, t_operator opr, t_data *data)
 {
 	if (stat != SUCCESS)
 	{
@@ -51,15 +51,15 @@ void	operate_thread(pthread_t *tid, t_operator opr, t_data *data, void *p)
 	if (opr == OP_CREATE)
 	{
 		if (i < data->input->philos)
-			handler(pthread_create(tid, NULL, data->fn, p), opr, data);
+			wrapper(pthread_create(tid, NULL, data->fn, p), opr, data);
 		else
-			handler(pthread_create(tid, NULL, data->mn, p), opr, data);
-		alter_iterator(&data->mutex[MX_ITER], &i, true, data);
+			wrapper(pthread_create(tid, NULL, data->mn, p), opr, data);
+		alter_iterator(&i, &data->mutex[MX_ITER], data);
 	}
 	else if (opr == OP_JOIN)
-		handler(pthread_join(*tid, NULL), opr, data);
+		wrapper(pthread_join(*tid, NULL), opr, data);
 	else if (opr == OP_DETACH)
-		handler(pthread_detach(*tid), opr, data);
+		wrapper(pthread_detach(*tid), opr, data);
 	else
 	{
 		log_error(FAILURE, MSG_OPER, "<operate_thread>", "");

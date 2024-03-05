@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 14:54:47 by jmertane          #+#    #+#             */
-/*   Updated: 2024/02/29 08:23:05 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/03/04 18:35:31 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static char	*fn_name(t_operator opr)
 		return ("<pthread_mutex_destroy>: ");
 }
 
-static void	handler(int stat, t_operator opr, t_data *data)
+static void	wrapper(int stat, t_operator opr, t_data *data)
 {
 	if (stat != SUCCESS)
 	{
@@ -49,13 +49,13 @@ static void	handler(int stat, t_operator opr, t_data *data)
 void	operate_mutex(t_mtx *mutex, t_operator opr, t_data *data)
 {
 	if (opr == OP_INIT)
-		handler(pthread_mutex_init(mutex, NULL), opr, data);
+		wrapper(pthread_mutex_init(mutex, NULL), opr, data);
 	else if (opr == OP_LOCK)
-		handler(pthread_mutex_lock(mutex), opr, data);
+		wrapper(pthread_mutex_lock(mutex), opr, data);
 	else if (opr == OP_UNLOCK)
-		handler(pthread_mutex_unlock(mutex), opr, data);
+		wrapper(pthread_mutex_unlock(mutex), opr, data);
 	else if (opr == OP_DESTROY)
-		handler(pthread_mutex_destroy(mutex), opr, data);
+		wrapper(pthread_mutex_destroy(mutex), opr, data);
 	else
 	{
 		log_error(FAILURE, MSG_OPER, "<operate_mutex>", "");

@@ -6,13 +6,13 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 17:25:47 by jmertane          #+#    #+#             */
-/*   Updated: 2024/02/27 18:12:48 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/03/05 12:16:48 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	print_message(int id, t_ul time, t_state state)
+static void	print_message(int id, t_ul time, t_state state, t_data *data)
 {
 	if (state == ST_TAKE)
 		printf("%s%-5lu %s%d %s%shas taken fork\n%s",
@@ -29,6 +29,11 @@ static void	print_message(int id, t_ul time, t_state state)
 	else if (state == ST_DIE)
 		printf("%s%-5lu %s%d %sdied\n%s",
 			P, time, CB, id, RB, T);
+	else
+	{
+		printf("Invalid state in <log_status>");
+		error_occured(data, EXIT_FAILURE);
+	}
 }
 
 void	log_status(t_philo *phil, t_state state)
@@ -39,9 +44,10 @@ void	log_status(t_philo *phil, t_state state)
 	operate_mutex(&data->mutex[MX_LOG], OP_LOCK, data);
 	if (!process_finished(data) && !process_failed(data))
 	{
-		set_timer(&data->mutex[MX_SYNC], &data->uptime,
-			update_time(OP_MSEC, data) - data->start, data);
-		print_message(phil->id, data->uptime, state);
+		set_timer(&data->uptime,
+			update_time(OP_MSEC, data) - data->start,
+			&data->mutex[MX_SYNC], data);
+		print_message(phil->id, data->uptime, state, data);
 	}
 	operate_mutex(&data->mutex[MX_LOG], OP_UNLOCK, data);
 }

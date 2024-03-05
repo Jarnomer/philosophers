@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 17:16:59 by jmertane          #+#    #+#             */
-/*   Updated: 2024/02/27 18:12:28 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/03/04 17:33:05 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,13 @@ static void	take_forks(t_philo *phil, t_data *data)
 static void	eat_routine(t_philo *phil, t_data *data)
 {
 	take_forks(phil, data);
-	set_status(&phil->mutex[MX_EAT],
-		&phil->stat[ST_EAT], true, data);
+	set_status(&phil->stat[ST_EAT], true, &phil->mutex[MX_EAT], data);
 	log_status(phil, ST_EAT);
 	percision_sleep(data->input->eat, data);
 	phil->meals -= 1;
-	set_status(&phil->mutex[MX_EAT],
-		&phil->stat[ST_EAT], false, data);
-	set_timer(&phil->mutex[MX_TIME], &phil->timer,
-		update_time(OP_MSEC, data) - data->start, data);
+	set_status(&phil->stat[ST_EAT], false, &phil->mutex[MX_EAT], data);
+	set_timer(&phil->timer, update_time(OP_MSEC, data) - data->start,
+		&phil->mutex[MX_TIME], data);
 	put_forks(phil, data);
 }
 
@@ -63,8 +61,8 @@ void	*process_routine(void *param)
 			break ;
 		eat_routine(phil, data);
 		if (!phil->meals)
-			set_status(&phil->mutex[MX_FULL],
-				&phil->stat[ST_FULL], true, data);
+			set_status(&phil->stat[ST_FULL], true,
+				&phil->mutex[MX_FULL], data);
 		sleep_routine(phil, data);
 	}
 	return (NULL);
