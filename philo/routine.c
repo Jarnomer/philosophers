@@ -41,7 +41,7 @@ static void	eat_routine(t_philo *phil, t_data *data)
 	percision_sleep(data->input->eat, data);
 	phil->meals -= 1;
 	set_status(&phil->stat[ST_EAT], false, &phil->mutex[MX_EAT], data);
-	set_timer(&phil->timer, update_time(OP_MSEC, data) - data->start,
+	set_timer(&phil->timer, update_time(OP_MSEC, data) - data->epoch,
 		&phil->mutex[MX_TIME], data);
 	put_forks(phil, data);
 }

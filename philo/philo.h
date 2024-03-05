@@ -48,7 +48,7 @@ typedef struct s_data	t_data;
 typedef pthread_mutex_t	t_mtx;
 typedef unsigned long	t_ul;
 
-# define MTX_NUM_D 5
+# define MTX_NUM_D 6
 # define MTX_NUM_P 3
 # define STT_NUM_D 3
 # define STT_NUM_P 3
@@ -65,6 +65,7 @@ typedef enum e_mutex
 	MX_SYNC,
 	MX_DONE,
 	MX_ITER,
+	MX_EPCH,
 	MX_LOG,
 	MX_EAT		= 0,
 	MX_FULL,
@@ -124,7 +125,7 @@ typedef struct s_data
 	t_input		*input;
 	t_philo		*phils;
 	t_mtx		*forks;
-	t_ul		start;
+	t_ul		epoch;
 	t_ul		uptime;
 	int			excode;
 	pthread_t	tid;

@@ -45,8 +45,8 @@ void	log_status(t_philo *phil, t_state state)
 	if (!process_finished(data) && !process_failed(data))
 	{
 		set_timer(&data->uptime,
-			update_time(OP_MSEC, data) - data->start,
-			&data->mutex[MX_SYNC], data);
+			update_time(OP_MSEC, data) - data->epoch,
+			&data->mutex[MX_EPCH], data);
 		print_message(phil->id, data->uptime, state, data);
 	}
 	operate_mutex(&data->mutex[MX_LOG], OP_UNLOCK, data);

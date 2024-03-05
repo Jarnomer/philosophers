@@ -33,7 +33,9 @@ static void	status_checker(t_data *data)
 		if (process_finished(data) || process_failed(data))
 			return ;
 		mealtime = get_timer(&phil->timer, &phil->mutex[MX_TIME], data);
-		uptime = update_time(OP_MSEC, data) - data->start;
+		uptime = get_timer(&data->uptime, &data->mutex[MX_EPCH], data);
+		set_timer(&data->uptime, update_time(OP_MSEC, data) - data->epoch,
+			&data->mutex[MX_EPCH], data);
 		if (get_status(&phil->stat[ST_FULL], &phil->mutex[MX_FULL], data))
 			set_finished(phil, data, ST_FULL);
 		else if (uptime - mealtime > (t_ul)data->input->die)

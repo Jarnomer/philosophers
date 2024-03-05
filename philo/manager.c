@@ -98,7 +98,8 @@ int	process_manager(t_data *data)
 		return (destroy_mutexes(data));
 	if (init_threads(data) != SUCCESS)
 		return (join_threads(data));
-	data->start = update_time(OP_MSEC, data);
+	set_timer(&data->epoch, update_time(OP_MSEC, data),
+		&data->mutex[MX_EPCH], data);
 	threads_synchronized(data);
 	return (join_threads(data));
 }
