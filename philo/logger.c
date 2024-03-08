@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 17:25:47 by jmertane          #+#    #+#             */
-/*   Updated: 2024/03/08 14:26:36 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/03/08 15:21:03 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,14 @@ static void	print_message(int id, t_ul time, t_state state, t_data *data)
 void	log_status(t_philo *phil, t_state state)
 {
 	t_data	*data;
+	t_ul	uptime;
 
 	data = phil->data;
 	if (process_finished(data) || process_failed(data))
 		return ;
 	operate_mutex(&data->mutex[MX_LOG], OP_LOCK, data);
-	print_message(phil->id, data->uptime, state, data);
+	uptime = get_timer(&data->uptime, &data->mutex[MX_EPCH], data);
+	print_message(phil->id, uptime, state, data);
 	operate_mutex(&data->mutex[MX_LOG], OP_UNLOCK, data);
 }
 
