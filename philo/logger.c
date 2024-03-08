@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 17:25:47 by jmertane          #+#    #+#             */
-/*   Updated: 2024/03/05 12:16:48 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/03/08 14:26:36 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,19 @@
 static void	print_message(int id, t_ul time, t_state state, t_data *data)
 {
 	if (state == ST_TAKE)
-		printf("%s%-5lu %s%d %s%shas taken fork\n%s",
+		printf("%s%-5lu %s%-3d %s%shas taken fork\n%s",
 			P, time, CB, id, T, G, T);
 	else if (state == ST_EAT)
-		printf("%s%-5lu %s%d %s%sis eating\n%s",
+		printf("%s%-5lu %s%-3d %s%sis eating\n%s",
 			P, time, CB, id, T, G, T);
 	else if (state == ST_SLP)
-		printf("%s%-5lu %s%d %s%sis sleeping\n%s",
+		printf("%s%-5lu %s%-3d %s%sis sleeping\n%s",
 			P, time, CB, id, T, G, T);
 	else if (state == ST_THK)
-		printf("%s%-5lu %s%d %s%sis thinking\n%s",
+		printf("%s%-5lu %s%-3d %s%sis thinking\n%s",
 			P, time, CB, id, T, G, T);
 	else if (state == ST_DIE)
-		printf("%s%-5lu %s%d %sdied\n%s",
+		printf("%s%-5lu %s%-3d %sdied\n%s",
 			P, time, CB, id, RB, T);
 	else
 	{
@@ -41,14 +41,10 @@ void	log_status(t_philo *phil, t_state state)
 	t_data	*data;
 
 	data = phil->data;
+	if (process_finished(data) || process_failed(data))
+		return ;
 	operate_mutex(&data->mutex[MX_LOG], OP_LOCK, data);
-	if (!process_finished(data) && !process_failed(data))
-	{
-		set_timer(&data->uptime,
-			update_time(OP_MSEC, data) - data->epoch,
-			&data->mutex[MX_EPCH], data);
-		print_message(phil->id, data->uptime, state, data);
-	}
+	print_message(phil->id, data->uptime, state, data);
 	operate_mutex(&data->mutex[MX_LOG], OP_UNLOCK, data);
 }
 

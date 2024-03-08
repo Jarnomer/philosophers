@@ -6,54 +6,59 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 17:25:22 by jmertane          #+#    #+#             */
-/*   Updated: 2024/03/04 21:16:28 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/03/08 14:23:44 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static inline void	set_finished(t_philo *phil, t_data *data, t_state state)
+static inline void	set_finished(t_data *data)
 {
-	if (state == ST_DIE)
-		log_status(phil, ST_DIE);
 	set_status(&data->stat[ST_DONE], true, &data->mutex[MX_DONE], data);
 }
 
-static void	status_checker(t_data *data)
+static inline bool	philosopher_full(t_philo *phil, t_data *data)
 {
-	t_philo	*phil;
-	t_ul	uptime;
-	t_ul	mealtime;
-	int		i;
+	return (get_status(&phil->stat[ST_FULL], &phil->mutex[MX_FULL], data));
+}
 
-	i = 0;
-	while (i < data->input->philos)
+static bool	philosopher_death(t_philo *phil, t_data *data)
+{
+	t_ul	mealtime;
+
+	mealtime = get_timer(&phil->mealtime, &phil->mutex[MX_TIME], data);
+	if (data->uptime - mealtime > (t_ul)data->input->die)
 	{
-		phil = data->phils + i++;
-		if (process_finished(data) || process_failed(data))
-			return ;
-		mealtime = get_timer(&phil->timer, &phil->mutex[MX_TIME], data);
-		uptime = get_timer(&data->uptime, &data->mutex[MX_EPCH], data);
-		set_timer(&data->uptime, update_time(OP_MSEC, data) - data->epoch,
-			&data->mutex[MX_EPCH], data);
-		if (get_status(&phil->stat[ST_FULL], &phil->mutex[MX_FULL], data))
-			set_finished(phil, data, ST_FULL);
-		else if (uptime - mealtime > (t_ul)data->input->die)
-			set_finished(phil, data, ST_DIE);
+		log_status(phil, ST_DIE);
+		return (true);
 	}
+	return (false);
 }
 
 void	*process_monitor(void *param)
 {
 	t_data	*data;
+	t_philo	*phil;
+	int		i;
 
 	data = (t_data *)param;
+	threads_spinlocked(data);
 	while (true)
 	{
-		if (process_finished(data)
-			|| process_failed(data))
-			break ;
-		status_checker(data);
+		i = 0;
+		while (i < data->input->philos)
+		{
+			phil = data->phils + i++;
+			set_timer(&data->uptime,
+				update_time(OP_MSEC, data) - data->epoch,
+				&data->mutex[MX_EPCH], data);
+			if (process_finished(data)
+				|| process_failed(data))
+				return (NULL);
+			else if (philosopher_full(phil, data)
+				|| philosopher_death(phil, data))
+				set_finished(data);
+		}
 	}
 	return (NULL);
 }

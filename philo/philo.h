@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 20:38:07 by jmertane          #+#    #+#             */
-/*   Updated: 2024/03/04 18:12:09 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/03/08 13:20:08 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ typedef struct s_input
 typedef struct s_philo
 {
 	t_data		*data;
-	t_ul		timer;
+	t_ul		mealtime;
 	int			meals;
 	int			id;
 	pthread_t	tid;
