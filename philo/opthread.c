@@ -50,10 +50,12 @@ void	operate_thread(pthread_t *tid, t_operator opr, t_data *data, void *p)
 
 	if (opr == OP_CREATE)
 	{
-		if (i < data->input->philos)
-			wrapper(pthread_create(tid, NULL, data->fn, p), opr, data);
+		if (data->input->philos == 1 && !i)
+			wrapper(pthread_create(tid, NULL, process_loner, p), opr, data);
+		else if (i < data->input->philos)
+			wrapper(pthread_create(tid, NULL, process_routine, p), opr, data);
 		else
-			wrapper(pthread_create(tid, NULL, data->mn, p), opr, data);
+			wrapper(pthread_create(tid, NULL, process_monitor, p), opr, data);
 		alter_iterator(&i, &data->mutex[MX_ITER], data);
 	}
 	else if (opr == OP_JOIN)

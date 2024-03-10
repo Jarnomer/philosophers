@@ -73,8 +73,6 @@ int	init_data(t_data *data, int ac, char **av)
 	if (!data->phils || !data->forks)
 		return (free_mem(ENOMEM, data, MSG_MEM));
 	init_philosophers(data, cnt);
-	data->fn = &process_routine;
-	data->mn = &process_monitor;
 	data->excode = SUCCESS;
 	return (SUCCESS);
 }

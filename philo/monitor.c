@@ -17,9 +17,23 @@ static inline void	set_finished(t_data *data)
 	set_status(&data->stat[ST_DONE], true, &data->mutex[MX_DONE], data);
 }
 
-static inline bool	philosopher_full(t_philo *phil, t_data *data)
+static bool	philosophers_full(t_data *data)
 {
-	return (get_status(&phil->stat[ST_FULL], &phil->mutex[MX_FULL], data));
+	t_philo	*phil;
+	int		fulls;
+	int		i;
+
+	fulls = 0;
+	i = 0;
+	while (i < data->input->philos)
+	{
+		phil = data->phils + i++;
+		if (get_status(&phil->stat[ST_FULL], &phil->mutex[MX_FULL], data))
+			fulls++;
+	}
+	if (fulls == data->input->philos)
+		return (true);
+	return (false);
 }
 
 static bool	philosopher_death(t_philo *phil, t_data *data)
@@ -60,7 +74,7 @@ void	*process_monitor(void *param)
 				|| process_failed(data))
 				return (NULL);
 			else if (philosopher_death(phil, data)
-				|| philosopher_full(phil, data))
+				|| philosophers_full(data))
 				set_finished(data);
 		}
 	}

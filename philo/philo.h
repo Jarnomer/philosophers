@@ -81,6 +81,7 @@ typedef enum e_state
 	ST_FULL,
 	ST_DIE,
 	ST_TAKE,
+	ST_PUT,
 	ST_SLP,
 	ST_THK
 }	t_state;
@@ -131,16 +132,15 @@ typedef struct s_data
 	pthread_t	tid;
 	t_mtx		mutex[MTX_NUM_D];
 	bool		stat[STT_NUM_D];
-	void		*(*fn)(void *);
-	void		*(*mn)(void *);
 }	t_data;
 
 int		valid_args(int ac, char **av);
 long	custom_atol(const char *str);
 int		init_data(t_data *data, int ac, char **av);
 int		process_manager(t_data *data);
-void	*process_routine(void *param);
 void	*process_monitor(void *param);
+void	*process_routine(void *param);
+void	*process_loner(void *param);
 void	operate_mutex(t_mtx *mutex, t_operator opr, t_data *data);
 void	operate_thread(pthread_t *tid, t_operator opr, t_data *data, void *p);
 int		log_usage(int errcode);

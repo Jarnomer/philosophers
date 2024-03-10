@@ -31,7 +31,7 @@ static void	print_message(int id, t_ul time, t_state state, t_data *data)
 			P, time, CB, id, RB, T);
 	else
 	{
-		printf("Invalid state in <log_status>");
+		log_error(FAILURE, MSG_OPER, "<print_message>", "");
 		error_occured(data, EXIT_FAILURE);
 	}
 }
@@ -42,11 +42,10 @@ void	log_status(t_philo *phil, t_state state)
 	t_ul	uptime;
 
 	data = phil->data;
-	if (process_finished(data) || process_failed(data))
-		return ;
-	operate_mutex(&data->mutex[MX_LOG], OP_LOCK, data);
 	uptime = get_timer(&data->uptime, &data->mutex[MX_EPCH], data);
-	print_message(phil->id, uptime, state, data);
+	operate_mutex(&data->mutex[MX_LOG], OP_LOCK, data);
+	if (!process_finished(data) && !process_failed(data))
+		print_message(phil->id, uptime, state, data);
 	operate_mutex(&data->mutex[MX_LOG], OP_UNLOCK, data);
 }
 
