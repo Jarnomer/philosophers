@@ -29,7 +29,7 @@ void	percision_sleep(t_ul target, t_data *data)
 		if (process_finished(data) || process_failed(data))
 			break ;
 		remain = target - gettime(start, data);
-		if (remain > 1e5)
+		if (remain > 1e3)
 			usleep(remain / 2);
 		else
 			while (gettime(start, data) < target)

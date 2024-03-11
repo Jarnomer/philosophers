@@ -27,7 +27,7 @@
 # define MSG_MEM "Out of memory"
 # define MSG_SYSC "System call error in "
 # define MSG_OPER "Invalid operator in "
-# define MSG_CNT "Number of philosopher or meals can't be 0"
+# define MSG_CNT "Number of philosophers or meals can't be 0"
 # define MSG_ARGC "Number of argments must be 4 or 5\n"
 # define MSG_EXAM "./philo 2 600 300 200 (4)\n"
 # define MSG_HELP "\
