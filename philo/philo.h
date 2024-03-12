@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 20:38:07 by jmertane          #+#    #+#             */
-/*   Updated: 2024/03/08 13:20:08 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/03/12 21:05:47 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,10 @@
 # include <sys/time.h>
 # include <unistd.h>
 
-# define MSG_ARGV "Is invalid argument"
+# define MSG_ARGV "Is invalid argument, enter number above 0"
 # define MSG_MEM "Out of memory"
 # define MSG_SYSC "System call error in "
 # define MSG_OPER "Invalid operator in "
-# define MSG_CNT "Number of philosophers or meals can't be 0"
 # define MSG_ARGC "Number of argments must be 4 or 5\n"
 # define MSG_EXAM "./philo 2 600 300 200 (4)\n"
 # define MSG_HELP "\
@@ -49,9 +48,9 @@ typedef pthread_mutex_t	t_mtx;
 typedef unsigned long	t_ul;
 
 # define MTX_NUM_D 6
-# define MTX_NUM_P 3
-# define STT_NUM_D 3
-# define STT_NUM_P 3
+# define STT_NUM_D 4
+# define MTX_NUM_P 4
+# define STT_NUM_P 4
 
 typedef enum e_check
 {
@@ -69,7 +68,8 @@ typedef enum e_mutex
 	MX_LOG,
 	MX_EAT		= 0,
 	MX_FULL,
-	MX_TIME
+	MX_TIME,
+	MX_DIE
 }	t_mutex;
 
 typedef enum e_state
@@ -77,10 +77,12 @@ typedef enum e_state
 	ST_ERR		= 0,
 	ST_SYNC,
 	ST_DONE,
+	ST_EVEN,
 	ST_EAT		= 0,
 	ST_FULL,
+	ST_LEAD,
 	ST_DIE,
-	ST_TAKE,
+	ST_TAKE		= 10,
 	ST_PUT,
 	ST_SLP,
 	ST_THK
@@ -111,6 +113,7 @@ typedef struct s_input
 typedef struct s_philo
 {
 	t_data		*data;
+	t_ul		think;
 	t_ul		mealtime;
 	int			meals;
 	int			id;

@@ -6,11 +6,16 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 20:18:59 by jmertane          #+#    #+#             */
-/*   Updated: 2024/03/04 21:14:01 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/03/12 21:15:37 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+static inline long	set_cooldown(t_input *input)
+{
+	return (((input->eat * 2) - input->sleep) / 2);
+}
 
 static void	assign_forks(t_data *data, t_philo *phil, int i, int cnt)
 {
@@ -32,9 +37,13 @@ static void	assign_forks(t_data *data, t_philo *phil, int i, int cnt)
 static void	init_philosophers(t_data *data, int cnt)
 {
 	t_philo	*phil;
+	long	cooldown;
+	bool	even;
 	int		i;
 
 	i = 0;
+	even = data->stat[ST_EVEN];
+	cooldown = set_cooldown(data->input);
 	while (i < cnt)
 	{
 		phil = data->phils + i;
@@ -43,6 +52,12 @@ static void	init_philosophers(t_data *data, int cnt)
 		phil->meals = data->input->meals;
 		phil->data = data;
 		phil->id = 1 + i++;
+		if (even && phil->id % 2 == 1)
+			phil->stat[ST_LEAD] = true;
+		if (!even && phil->id % 2 == 0)
+			phil->stat[ST_LEAD] = true;
+		if (!even && cooldown > 0)
+			phil->think = cooldown;
 	}
 }
 
@@ -72,6 +87,8 @@ int	init_data(t_data *data, int ac, char **av)
 	data->forks = malloc(sizeof(t_mtx) * cnt);
 	if (!data->phils || !data->forks)
 		return (free_mem(ENOMEM, data, MSG_MEM));
+	if (cnt % 2 != 0)
+		data->stat[ST_EVEN] = true;
 	init_philosophers(data, cnt);
 	data->excode = SUCCESS;
 	return (SUCCESS);

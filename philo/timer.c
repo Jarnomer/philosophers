@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 19:22:38 by jmertane          #+#    #+#             */
-/*   Updated: 2024/03/04 20:05:27 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/03/12 21:34:11 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,14 @@ void	percision_sleep(t_ul target, t_data *data)
 	long	start;
 	long	remain;
 
-	target *= 1e3;
+	target *= 1000;
 	start = update_time(OP_USEC, data);
 	while (gettime(start, data) < target)
 	{
 		if (process_finished(data) || process_failed(data))
 			break ;
 		remain = target - gettime(start, data);
-		if (remain > 1e3)
+		if (remain > 1000)
 			usleep(remain / 2);
 		else
 			while (gettime(start, data) < target)

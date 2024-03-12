@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 19:11:28 by jmertane          #+#    #+#             */
-/*   Updated: 2024/02/25 17:44:51 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/03/12 19:42:12 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,24 +20,24 @@ static inline int	ft_isdigit(char c)
 long	custom_atol(const char *str)
 {
 	long	num;
-	long	sgn;
 
 	num = 0;
-	sgn = 1;
 	while (ft_isdigit(*str))
 	{
 		num = num * 10 + *str++ - '0';
 		if (num > INT_MAX)
 			return (FAILURE);
 	}
-	return (num * sgn);
+	if (!num)
+		return (FAILURE);
+	return (num);
 }
 
 static int	valid_chars(const char *str)
 {
 	int	i;
 
-	if (!*str)
+	if (!str || !*str)
 		return (FAILURE);
 	i = 0;
 	while (str[i] != '\0')
@@ -57,8 +57,5 @@ int	valid_args(int ac, char **av)
 			|| custom_atol(av[ac]) == FAILURE)
 			return (log_error(EINVAL, av[ac], ": ", MSG_ARGV));
 	}
-	if ((ac == 6 && !custom_atol(av[ac - 1]))
-		|| !custom_atol(av[1]))
-		return (log_error(EINVAL, MSG_CNT, "", ""));
 	return (SUCCESS);
 }

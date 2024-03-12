@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 17:25:22 by jmertane          #+#    #+#             */
-/*   Updated: 2024/03/08 15:26:51 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/03/12 21:38:28 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ static bool	philosopher_death(t_data *data)
 		mealtime = get_timer(&phil->mealtime, &phil->mutex[MX_TIME], data);
 		if (updated_runtime(data) - mealtime > (t_ul)data->input->die)
 		{
+			set_status(&phil->stat[ST_DIE], true, &phil->mutex[MX_DIE], data);
 			log_status(phil, ST_DIE);
 			return (true);
 		}
@@ -76,7 +77,7 @@ void	*process_monitor(void *param)
 	{
 		if (process_finished(data)
 			|| process_failed(data))
-			return (NULL);
+			break ;
 		else if (philosopher_death(data)
 			|| philosophers_full(data))
 			set_finished(data);
