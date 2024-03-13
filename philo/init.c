@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 20:18:59 by jmertane          #+#    #+#             */
-/*   Updated: 2024/03/12 21:15:37 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/03/13 17:15:10 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static inline long	set_cooldown(t_input *input)
 {
-	return (((input->eat * 2) - input->sleep) / 2);
+	return ((input->eat - input->sleep) + 1);
 }
 
 static void	assign_forks(t_data *data, t_philo *phil, int i, int cnt)
@@ -34,15 +34,13 @@ static void	assign_forks(t_data *data, t_philo *phil, int i, int cnt)
 	}
 }
 
-static void	init_philosophers(t_data *data, int cnt)
+static void	init_philosophers(t_data *data, int cnt, bool even)
 {
 	t_philo	*phil;
 	long	cooldown;
-	bool	even;
 	int		i;
 
 	i = 0;
-	even = data->stat[ST_EVEN];
 	cooldown = set_cooldown(data->input);
 	while (i < cnt)
 	{
@@ -50,14 +48,14 @@ static void	init_philosophers(t_data *data, int cnt)
 		memset(phil, 0, sizeof(t_philo));
 		assign_forks(data, phil, i, cnt);
 		phil->meals = data->input->meals;
+		if (!even && cooldown > 0)
+			phil->cooldown = cooldown;
 		phil->data = data;
 		phil->id = 1 + i++;
-		if (even && phil->id % 2 == 1)
+		if (even && phil->id % 2 != 0)
 			phil->stat[ST_LEAD] = true;
 		if (!even && phil->id % 2 == 0)
 			phil->stat[ST_LEAD] = true;
-		if (!even && cooldown > 0)
-			phil->think = cooldown;
 	}
 }
 
@@ -76,8 +74,10 @@ static int	fill_input(t_input *input, int ac, char **av)
 
 int	init_data(t_data *data, int ac, char **av)
 {
-	int	cnt;
+	bool	even;
+	int		cnt;
 
+	even = false;
 	memset(data, 0, sizeof(t_data));
 	data->input = malloc(sizeof(t_input));
 	if (!data->input)
@@ -87,9 +87,9 @@ int	init_data(t_data *data, int ac, char **av)
 	data->forks = malloc(sizeof(t_mtx) * cnt);
 	if (!data->phils || !data->forks)
 		return (free_mem(ENOMEM, data, MSG_MEM));
-	if (cnt % 2 != 0)
-		data->stat[ST_EVEN] = true;
-	init_philosophers(data, cnt);
+	if (cnt % 2 == 0)
+		even = true;
+	init_philosophers(data, cnt, even);
 	data->excode = SUCCESS;
 	return (SUCCESS);
 }

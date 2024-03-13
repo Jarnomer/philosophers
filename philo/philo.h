@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 20:38:07 by jmertane          #+#    #+#             */
-/*   Updated: 2024/03/12 21:05:47 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/03/13 11:19:03 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ typedef pthread_mutex_t	t_mtx;
 typedef unsigned long	t_ul;
 
 # define MTX_NUM_D 6
-# define STT_NUM_D 4
+# define STT_NUM_D 3
 # define MTX_NUM_P 4
 # define STT_NUM_P 4
 
@@ -77,12 +77,11 @@ typedef enum e_state
 	ST_ERR		= 0,
 	ST_SYNC,
 	ST_DONE,
-	ST_EVEN,
 	ST_EAT		= 0,
 	ST_FULL,
-	ST_LEAD,
 	ST_DIE,
-	ST_TAKE		= 10,
+	ST_LEAD,
+	ST_TAKE,
 	ST_PUT,
 	ST_SLP,
 	ST_THK
@@ -113,7 +112,7 @@ typedef struct s_input
 typedef struct s_philo
 {
 	t_data		*data;
-	t_ul		think;
+	t_ul		cooldown;
 	t_ul		mealtime;
 	int			meals;
 	int			id;
