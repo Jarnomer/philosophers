@@ -124,6 +124,9 @@ re: fclean all
 
 reb: fclean bonus
 
+nm:
+	norminette $(SRCSDIR)$(SRCS)
+
 $(OBJSDIR) $(DEPSDIR):
 	@mkdir -p $@/$(SRCSDIR)$(BONUSDIR)
 

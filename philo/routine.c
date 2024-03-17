@@ -23,8 +23,7 @@ void	*process_loner(void *param)
 	log_status(phil, ST_TAKE);
 	percision_sleep(data->input->die, data);
 	while (true)
-		if (process_finished(data)
-			|| process_failed(data))
+		if (process_finished(data) || process_failed(data))
 			break ;
 	return (NULL);
 }
@@ -53,25 +52,25 @@ static void	handle_forks(t_philo *phil, t_state state, t_data *data)
 	}
 	else
 	{
-		log_error(FAILURE, MSG_OPER, "<handle_forks>", "");
+		log_error(FAILURE, MSG_STAT, "<handle_forks>", "");
 		error_occured(data, EXIT_FAILURE);
 	}
 }
 
 static void	eat_routine(t_philo *phil, t_data *data)
 {
-	if (get_status(&phil->stat[ST_DIE], &phil->mutex[MX_DIE], data))
-		return ;
 	handle_forks(phil, ST_TAKE, data);
-	set_status(&phil->stat[ST_EAT], true, &phil->mutex[MX_EAT], data);
 	set_timer(&phil->mealtime, update_time(OP_MSEC, data) - data->epoch,
 		&phil->mutex[MX_TIME], data);
 	log_status(phil, ST_EAT);
 	percision_sleep(data->input->eat, data);
-	set_status(&phil->stat[ST_EAT], false, &phil->mutex[MX_EAT], data);
-	if (--phil->meals == 0)
-		set_status(&phil->stat[ST_FULL], true, &phil->mutex[MX_FULL], data);
 	handle_forks(phil, ST_PUT, data);
+	if (!get_status(&phil->stat[ST_FULL], &phil->mutex[MX_FULL], data)
+		&& --phil->meals == 0)
+	{
+		log_status(phil, ST_FULL);
+		set_status(&phil->stat[ST_FULL], true, &phil->mutex[MX_FULL], data);
+	}
 }
 
 void	*process_routine(void *param)
@@ -89,8 +88,7 @@ void	*process_routine(void *param)
 	}
 	while (true)
 	{
-		if (process_finished(data)
-			|| process_failed(data))
+		if (process_finished(data) || process_failed(data))
 			break ;
 		eat_routine(phil, data);
 		sleep_routine(phil, data);

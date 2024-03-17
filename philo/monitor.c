@@ -31,11 +31,11 @@ static bool	philosophers_full(t_data *data)
 	int		done;
 	int		i;
 
-	i = -1;
+	i = 0;
 	done = 0;
-	while (++i < data->input->philos)
+	while (i < data->input->philos)
 	{
-		phil = data->phils + i;
+		phil = data->phils + i++;
 		if (get_status(&phil->stat[ST_FULL], &phil->mutex[MX_FULL], data))
 			done++;
 	}
@@ -50,16 +50,13 @@ static bool	philosopher_death(t_data *data)
 	t_philo	*phil;
 	int		i;
 
-	i = -1;
-	while (++i < data->input->philos)
+	i = 0;
+	while (i < data->input->philos)
 	{
-		phil = data->phils + i;
-		if (get_status(&phil->stat[ST_EAT], &phil->mutex[MX_EAT], data))
-			continue ;
+		phil = data->phils + i++;
 		mealtime = get_timer(&phil->mealtime, &phil->mutex[MX_TIME], data);
 		if (updated_runtime(data) - mealtime > (t_ul)data->input->die)
 		{
-			set_status(&phil->stat[ST_DIE], true, &phil->mutex[MX_DIE], data);
 			log_status(phil, ST_DIE);
 			return (true);
 		}

@@ -15,18 +15,19 @@
 
 # include <errno.h>
 # include <limits.h>
-# include <pthread.h>
 # include <stdbool.h>
 # include <stdio.h>
-# include <stdlib.h>
 # include <string.h>
+# include <pthread.h>
 # include <sys/time.h>
+# include <stdlib.h>
 # include <unistd.h>
 
 # define MSG_ARGV "Is invalid argument, enter number above 0"
 # define MSG_MEM "Out of memory"
 # define MSG_SYSC "System call error in "
 # define MSG_OPER "Invalid operator in "
+# define MSG_STAT "Invalid state in "
 # define MSG_ARGC "Number of argments must be 4 or 5\n"
 # define MSG_EXAM "./philo 2 600 300 200 (4)\n"
 # define MSG_HELP "\
@@ -38,6 +39,7 @@
 
 # define RB "\033[1;31m"
 # define CB "\033[1;36m"
+# define BB "\033[1;34m"
 # define G "\033[0;32m"
 # define Y "\033[0;33m"
 # define P "\033[0;35m"
@@ -49,8 +51,8 @@ typedef unsigned long	t_ul;
 
 # define MTX_NUM_D 6
 # define STT_NUM_D 3
-# define MTX_NUM_P 4
-# define STT_NUM_P 4
+# define MTX_NUM_P 2
+# define STT_NUM_P 2
 
 typedef enum e_check
 {
@@ -66,10 +68,8 @@ typedef enum e_mutex
 	MX_ITER,
 	MX_EPCH,
 	MX_LOG,
-	MX_EAT		= 0,
-	MX_FULL,
+	MX_FULL		= 0,
 	MX_TIME,
-	MX_DIE
 }	t_mutex;
 
 typedef enum e_state
@@ -77,14 +77,14 @@ typedef enum e_state
 	ST_ERR		= 0,
 	ST_SYNC,
 	ST_DONE,
-	ST_EAT		= 0,
+	ST_LEAD		= 0,
 	ST_FULL,
-	ST_DIE,
-	ST_LEAD,
+	ST_EAT,
 	ST_TAKE,
 	ST_PUT,
 	ST_SLP,
-	ST_THK
+	ST_THK,
+	ST_DIE
 }	t_state;
 
 typedef enum e_operator
