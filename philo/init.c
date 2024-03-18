@@ -74,10 +74,8 @@ static int	fill_input(t_input *input, int ac, char **av)
 
 int	init_data(t_data *data, int ac, char **av)
 {
-	bool	even;
 	int		cnt;
 
-	even = false;
 	memset(data, 0, sizeof(t_data));
 	data->input = malloc(sizeof(t_input));
 	if (!data->input)
@@ -88,8 +86,9 @@ int	init_data(t_data *data, int ac, char **av)
 	if (!data->phils || !data->forks)
 		return (free_mem(ENOMEM, data, MSG_MEM));
 	if (cnt % 2 == 0)
-		even = true;
-	init_philosophers(data, cnt, even);
+		init_philosophers(data, cnt, true);
+	else
+		init_philosophers(data, cnt, false);
 	data->excode = SUCCESS;
 	return (SUCCESS);
 }

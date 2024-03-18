@@ -22,7 +22,8 @@ static char	*err_msg(int stat, t_operator opr)
 		return ("Calling thread does not own the mutex.\n");
 	else if (stat == EBUSY && opr == OP_DESTROY)
 		return ("Mutex is currently locked.\n");
-	return (NULL);
+	else
+		return ("Unhandled mutex error\n");
 }
 
 static char	*fn_name(t_operator opr)

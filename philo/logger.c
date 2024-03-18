@@ -15,23 +15,23 @@
 static void	print_message(int id, t_ul time, t_state state, t_data *data)
 {
 	if (state == ST_TAKE)
-		printf("|%s  %-5lu |%s   %-3d |%s   %-3shas taken fork%s\t|\n",
-			P, time, CB, id, T, G, T);
+		printf("|%s  %-5lu %s|%s   %-3d %s|   %-3shas taken fork%s\t|\n",
+			P, time, T, CB, id, T, G, T);
 	else if (state == ST_EAT)
-		printf("|%s  %-5lu |%s   %-3d |%s   %-3sis eating%s\t\t|\n",
-			P, time, CB, id, T, G, T);
+		printf("|%s  %-5lu %s|%s   %-3d %s|   %-3sis eating%s\t\t|\n",
+			P, time, T, CB, id, T, G, T);
 	else if (state == ST_SLP)
-		printf("|%s  %-5lu |%s   %-3d |%s   %-3sis sleeping%s\t|\n",
-			P, time, CB, id, T, G, T);
+		printf("|%s  %-5lu %s|%s   %-3d %s|   %-3sis sleeping%s\t|\n",
+			P, time, T, CB, id, T, G, T);
 	else if (state == ST_THK)
-		printf("|%s  %-5lu |%s   %-3d |%s   %-3sis thinking%s\t|\n",
-			P, time, CB, id, T, G, T);
+		printf("|%s  %-5lu %s|%s   %-3d %s|   %-3sis thinking%s\t|\n",
+			P, time, T, CB, id, T, G, T);
 	else if (state == ST_DIE)
-		printf("|%s  %-5lu |%s   %-3d |   %-3sdied\t\t%s|\n",
-			P, time, CB, id, RB, T);
+		printf("|%s  %-5lu %s|%s   %-3d %s|   %-3sdied\t\t%s|\n",
+			P, time, T, CB, id, T, RB, T);
 	else if (state == ST_FULL)
-		printf("|%s  %-5lu |%s   %-3d |%s   %-3sis full%s\t\t|\n",
-			P, time, CB, id, T, BB, T);
+		printf("|%s  %-5lu %s|%s   %-3d %s|   %-3sis full%s\t\t|\n",
+			P, time, T, CB, id, T, BB, T);
 	else
 	{
 		log_error(FAILURE, MSG_STAT, "<print_message>", "");

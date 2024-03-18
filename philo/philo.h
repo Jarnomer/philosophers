@@ -23,7 +23,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-# define MSG_ARGV "Is invalid argument, enter number above 0"
+# define MSG_ARGV "Is invalid argument, enter value between 1 - INT_MAX"
 # define MSG_MEM "Out of memory"
 # define MSG_SYSC "System call error in "
 # define MSG_OPER "Invalid operator in "

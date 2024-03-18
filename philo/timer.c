@@ -40,12 +40,13 @@ void	percision_sleep(t_ul target, t_data *data)
 static char	*err_msg(int stat)
 {
 	if (stat == EFAULT)
-		return ("Pointer outside accessible address space.");
+		return ("Pointer outside accessible address space.\n");
 	else if (stat == EINVAL)
-		return ("Timezone or something else is invalid.");
+		return ("Timezone or something else is invalid.\n");
 	else if (stat == EPERM)
-		return ("Calling process has insufficient privilege");
-	return (NULL);
+		return ("Calling process has insufficient privilege\n");
+	else
+		return ("Unhandled gettimeofday error\n");
 }
 
 static void	wrapper(int stat, t_operator opr, t_data *data)

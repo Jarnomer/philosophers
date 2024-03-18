@@ -84,7 +84,7 @@ int	process_manager(t_data *data)
 	init_mutexes(data);
 	init_threads(data);
 	printf("-----------------------------------------\n");
-	printf("|%s  SIMULATION START!%s\t\t\t|\n", P, T);
+	printf("|%s  SIMULATION START %s\t\t\t|\n", RB, T);
 	printf("-----------------------------------------\n");
 	data->epoch = update_time(OP_MSEC, data);
 	threads_synchronized(data);
@@ -92,7 +92,7 @@ int	process_manager(t_data *data)
 	destroy_mutexes(data);
 	free_mem(0, data, NULL);
 	printf("-----------------------------------------\n");
-	printf("|%s  SIMULATION END!%s\t\t\t|\n", P, T);
+	printf("|%s  SIMULATION END %s\t\t\t|\n", RB, T);
 	printf("-----------------------------------------\n");
 	return (data->excode);
 }

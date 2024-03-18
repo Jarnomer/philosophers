@@ -23,12 +23,8 @@ long	custom_atol(const char *str)
 
 	num = 0;
 	while (ft_isdigit(*str))
-	{
 		num = num * 10 + *str++ - '0';
-		if (num > INT_MAX)
-			return (FAILURE);
-	}
-	if (!num)
+	if (!num || num > INT_MAX)
 		return (FAILURE);
 	return (num);
 }
@@ -41,11 +37,8 @@ static int	valid_chars(const char *str)
 		return (FAILURE);
 	i = 0;
 	while (str[i] != '\0')
-	{
-		if (!ft_isdigit(str[i]))
+		if (!ft_isdigit(str[i++]))
 			return (FAILURE);
-		i++;
-	}
 	return (SUCCESS);
 }
 
@@ -53,8 +46,7 @@ int	valid_args(int ac, char **av)
 {
 	while (--ac != 0)
 	{
-		if (valid_chars(av[ac]) == FAILURE
-			|| custom_atol(av[ac]) == FAILURE)
+		if (valid_chars(av[ac]) == FAILURE || custom_atol(av[ac]) == FAILURE)
 			return (log_error(EINVAL, av[ac], ": ", MSG_ARGV));
 	}
 	return (SUCCESS);

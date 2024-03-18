@@ -22,7 +22,8 @@ static char	*err_msg(int stat, t_operator opr)
 		return ("Deadlock was detected.\n");
 	else if (stat == EAGAIN && opr == OP_CREATE)
 		return ("Insufficient resources to create another thread.\n");
-	return (NULL);
+	else
+		return ("Unhandled thread error\n");
 }
 
 static char	*fn_name(t_operator opr)
