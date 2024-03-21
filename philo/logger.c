@@ -52,12 +52,32 @@ void	log_status(t_philo *phil, t_state state)
 	operate_mutex(&data->mutex[MX_LOG], OP_UNLOCK, data);
 }
 
-int	log_usage(int errcode)
+static int	ft_strlen(const char *s)
 {
-	printf("%s%s%s", RB, "Error: ", T);
-	printf("%s%s%s", Y, MSG_ARGC, T);
-	printf("%s%s%s", RB, "Example: ", T);
-	printf("%s%s%s", P, MSG_EXAM, T);
-	printf("%s%s%s", G, MSG_HELP, T);
+	int	len;
+
+	if (!s)
+		return (0);
+	len = 0;
+	while (s[len])
+		++len;
+	return (len);
+}
+
+static inline void	ft_putstr_fd(char *s, int fd)
+{
+	write(fd, s, ft_strlen(s));
+}
+
+int	log_error(int errcode, char *s1, char *s2, char *s3)
+{
+	ft_putstr_fd(RB, STDERR_FILENO);
+	ft_putstr_fd("Error: ", STDERR_FILENO);
+	ft_putstr_fd(T, STDERR_FILENO);
+	ft_putstr_fd(Y, STDERR_FILENO);
+	ft_putstr_fd(s1, STDERR_FILENO);
+	ft_putstr_fd(s2, STDERR_FILENO);
+	ft_putstr_fd(s3, STDERR_FILENO);
+	ft_putstr_fd(T, STDERR_FILENO);
 	return (errcode);
 }

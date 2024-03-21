@@ -145,7 +145,6 @@ void	*process_routine(void *param);
 void	*process_loner(void *param);
 void	operate_mutex(t_mtx *mutex, t_operator opr, t_data *data);
 void	operate_thread(pthread_t *tid, t_operator opr, t_data *data, void *p);
-int		log_usage(int errcode);
 void	log_status(t_philo *phil, t_state state);
 int		log_error(int errcode, char *s1, char *s2, char *s3);
 void	set_status(bool *dst, bool val, t_mtx *mutex, t_data *data);
@@ -160,6 +159,7 @@ void	threads_spinlocked(t_data *data);
 bool	process_finished(t_data *data);
 bool	process_failed(t_data *data);
 void	error_occured(t_data *data, int errcode);
+int		print_usage(int errcode);
 int		free_mem(int errcode, t_data *data, char *msg);
 
 #endif

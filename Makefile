@@ -40,11 +40,11 @@ FILES		:=	main \
 				monitor \
 				opmutex \
 				opthread \
-				timer \
+				optimer \
 				getset \
 				synchro \
 				logger \
-				error
+				utils
 
 BONUS		:=	$(EMPTY)
 

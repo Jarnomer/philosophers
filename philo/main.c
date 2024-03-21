@@ -17,7 +17,7 @@ int	main(int argc, char **argv)
 	t_data	data;
 
 	if (argc < 5 || argc > 6)
-		return (log_usage(EXIT_FAILURE));
+		return (print_usage(EXIT_FAILURE));
 	if (valid_args(argc, argv) != SUCCESS)
 		return (EINVAL);
 	if (init_data(&data, argc, argv) != SUCCESS)
