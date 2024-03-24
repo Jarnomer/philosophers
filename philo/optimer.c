@@ -46,7 +46,7 @@ static char	*err_msg(int stat)
 	else if (stat == EPERM)
 		return ("Calling process has insufficient privilege\n");
 	else
-		return ("Unhandled gettimeofday error\n");
+		return ("Unhandled gettimeofday error.\n");
 }
 
 static void	wrapper(int stat, t_operator opr, t_data *data)

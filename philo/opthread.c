@@ -23,7 +23,7 @@ static char	*err_msg(int stat, t_operator opr)
 	else if (stat == EAGAIN && opr == OP_CREATE)
 		return ("Insufficient resources to create another thread.\n");
 	else
-		return ("Unhandled thread error\n");
+		return ("Unhandled thread error.\n");
 }
 
 static char	*fn_name(t_operator opr)

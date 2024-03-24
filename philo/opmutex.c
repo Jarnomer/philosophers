@@ -23,7 +23,7 @@ static char	*err_msg(int stat, t_operator opr)
 	else if (stat == EBUSY && opr == OP_DESTROY)
 		return ("Mutex is currently locked.\n");
 	else
-		return ("Unhandled mutex error\n");
+		return ("Unhandled mutex error.\n");
 }
 
 static char	*fn_name(t_operator opr)
