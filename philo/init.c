@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 20:18:59 by jmertane          #+#    #+#             */
-/*   Updated: 2024/03/13 17:15:10 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/04/01 14:51:30 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static void	init_philosophers(t_data *data, int cnt, bool even)
 			phil->cooldown = cooldown;
 		phil->data = data;
 		phil->id = 1 + i++;
-		if (even && phil->id % 2 != 0)
+		if (even && phil->id % 2 == 1)
 			phil->stat[ST_LEAD] = true;
 		if (!even && phil->id % 2 == 0)
 			phil->stat[ST_LEAD] = true;

@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 13:35:15 by jmertane          #+#    #+#             */
-/*   Updated: 2024/03/05 12:12:19 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/04/02 18:32:04 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,16 +83,10 @@ int	process_manager(t_data *data)
 {
 	init_mutexes(data);
 	init_threads(data);
-	printf("-----------------------------------------\n");
-	printf("|%s  SIMULATION START %s\t\t\t|\n", RB, T);
-	printf("-----------------------------------------\n");
 	data->epoch = update_time(OP_MSEC, data);
 	threads_synchronized(data);
 	join_threads(data);
 	destroy_mutexes(data);
 	free_mem(0, data, NULL);
-	printf("-----------------------------------------\n");
-	printf("|%s  SIMULATION END %s\t\t\t|\n", RB, T);
-	printf("-----------------------------------------\n");
 	return (data->excode);
 }

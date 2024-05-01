@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 20:38:07 by jmertane          #+#    #+#             */
-/*   Updated: 2024/03/13 11:19:03 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/03/28 19:12:27 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct s_data	t_data;
 typedef pthread_mutex_t	t_mtx;
 typedef unsigned long	t_ul;
 
-# define MTX_NUM_D 6
+# define MTX_NUM_D 5
 # define STT_NUM_D 3
 # define MTX_NUM_P 2
 # define STT_NUM_P 2
@@ -65,7 +65,6 @@ typedef enum e_mutex
 	MX_ERR		= 0,
 	MX_SYNC,
 	MX_DONE,
-	MX_ITER,
 	MX_EPCH,
 	MX_LOG,
 	MX_FULL		= 0,
@@ -151,7 +150,6 @@ void	set_status(bool *dst, bool val, t_mtx *mutex, t_data *data);
 bool	get_status(bool *val, t_mtx *mutex, t_data *data);
 void	set_timer(t_ul *dst, t_ul val, t_mtx *mutex, t_data *data);
 t_ul	get_timer(t_ul *val, t_mtx *mutex, t_data *data);
-void	alter_iterator(int *i, t_mtx *mutex, t_data *data);
 t_ul	update_time(t_operator opr, t_data *data);
 void	percision_sleep(t_ul goal, t_data *data);
 void	threads_synchronized(t_data *data);

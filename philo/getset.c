@@ -6,18 +6,11 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 17:25:20 by jmertane          #+#    #+#             */
-/*   Updated: 2024/03/04 18:12:01 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/03/28 16:39:01 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-void	alter_iterator(int *i, t_mtx *mutex, t_data *data)
-{
-	operate_mutex(mutex, OP_LOCK, data);
-	(*i)++;
-	operate_mutex(mutex, OP_UNLOCK, data);
-}
 
 void	set_status(bool *dst, bool val, t_mtx *mutex, t_data *data)
 {

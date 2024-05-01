@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 15:03:58 by jmertane          #+#    #+#             */
-/*   Updated: 2024/03/04 18:12:35 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/03/30 19:34:18 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static char	*err_msg(int stat, t_operator opr)
 	else if (stat == EAGAIN && opr == OP_CREATE)
 		return ("Insufficient resources to create another thread.\n");
 	else
-		return ("Unhandled thread error.\n");
+		return ("Unhandled <operate_thread> error occured.\n");
 }
 
 static char	*fn_name(t_operator opr)
@@ -57,7 +57,7 @@ void	operate_thread(pthread_t *tid, t_operator opr, t_data *data, void *p)
 			wrapper(pthread_create(tid, NULL, process_routine, p), opr, data);
 		else
 			wrapper(pthread_create(tid, NULL, process_monitor, p), opr, data);
-		alter_iterator(&i, &data->mutex[MX_ITER], data);
+		i++;
 	}
 	else if (opr == OP_JOIN)
 		wrapper(pthread_join(*tid, NULL), opr, data);

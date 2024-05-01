@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   timer.c                                            :+:      :+:    :+:   */
+/*   optimer.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 19:22:38 by jmertane          #+#    #+#             */
-/*   Updated: 2024/03/12 21:34:11 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/03/30 19:38:38 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ static inline t_ul	gettime(t_ul start, t_data *data)
 void	percision_sleep(t_ul target, t_data *data)
 {
 	long	start;
-	long	remain;
 
 	target *= 1000;
 	start = update_time(OP_USEC, data);
@@ -28,12 +27,7 @@ void	percision_sleep(t_ul target, t_data *data)
 	{
 		if (process_finished(data) || process_failed(data))
 			break ;
-		remain = target - gettime(start, data);
-		if (remain > 1000)
-			usleep(remain / 2);
-		else
-			while (gettime(start, data) < target)
-				true ;
+		usleep(500);
 	}
 }
 
@@ -44,9 +38,9 @@ static char	*err_msg(int stat)
 	else if (stat == EINVAL)
 		return ("Timezone or something else is invalid.\n");
 	else if (stat == EPERM)
-		return ("Calling process has insufficient privilege\n");
+		return ("Calling process has insufficient privilege.\n");
 	else
-		return ("Unhandled gettimeofday error.\n");
+		return ("Unhandled <update_time> error occured.\n");
 }
 
 static void	wrapper(int stat, t_operator opr, t_data *data)
@@ -68,10 +62,10 @@ t_ul	update_time(t_operator opr, t_data *data)
 	struct timeval	tp;
 
 	wrapper(gettimeofday(&tp, NULL), opr, data);
-	if (process_failed(data))
-		return (ULONG_MAX);
-	else if (opr == OP_MSEC)
+	if (opr == OP_MSEC)
 		return ((tp.tv_sec * 1e3) + (tp.tv_usec / 1e3));
-	else
+	else if (opr == OP_USEC)
 		return ((tp.tv_sec * 1e6) + tp.tv_usec);
+	else
+		return (EXIT_FAILURE);
 }

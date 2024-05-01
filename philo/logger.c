@@ -6,7 +6,7 @@
 /*   By: jmertane <jmertane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 17:25:47 by jmertane          #+#    #+#             */
-/*   Updated: 2024/03/08 15:21:03 by jmertane         ###   ########.fr       */
+/*   Updated: 2024/05/01 15:13:10 by jmertane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,15 @@
 static void	print_message(int id, t_ul time, t_state state, t_data *data)
 {
 	if (state == ST_TAKE)
-		printf("|%s  %-5lu %s|%s   %-3d %s|   %-3shas taken fork%s\t|\n",
-			P, time, T, CB, id, T, G, T);
+		printf("%06lu %-4d has taken fork\n", time, id);
 	else if (state == ST_EAT)
-		printf("|%s  %-5lu %s|%s   %-3d %s|   %-3sis eating%s\t\t|\n",
-			P, time, T, CB, id, T, G, T);
+		printf("%06lu %-4d is eating\n", time, id);
 	else if (state == ST_SLP)
-		printf("|%s  %-5lu %s|%s   %-3d %s|   %-3sis sleeping%s\t|\n",
-			P, time, T, CB, id, T, G, T);
+		printf("%06lu %-4d is sleeping\n", time, id);
 	else if (state == ST_THK)
-		printf("|%s  %-5lu %s|%s   %-3d %s|   %-3sis thinking%s\t|\n",
-			P, time, T, CB, id, T, G, T);
+		printf("%06lu %-4d is thinking\n", time, id);
 	else if (state == ST_DIE)
-		printf("|%s  %-5lu %s|%s   %-3d %s|   %-3sdied\t\t%s|\n",
-			P, time, T, CB, id, T, RB, T);
-	else if (state == ST_FULL)
-		printf("|%s  %-5lu %s|%s   %-3d %s|   %-3sis full%s\t\t|\n",
-			P, time, T, CB, id, T, BB, T);
+		printf("%06lu %-4d died\n", time, id);
 	else
 	{
 		log_error(FAILURE, MSG_STAT, "<print_message>", "");
