@@ -23,13 +23,13 @@
 # define MSG_STAT	"Invalid state in "
 # define MSG_MEM	"Out of memory"
 
-# define MSG_EXAM	"./philo 2 600 300 200 (4)\n"
+# define MSG_EXAM	"./philo 2 610 300 200 (3)\n"
 # define MSG_HELP	"\
 [2]:\t<number of philosophers>\n\
-[600]:\t<time to die>\n\
+[610]:\t<time to die>\n\
 [300]:\t<time to eat>\n\
 [200]:\t<time to sleep>\n\
-[4]:\t<number of meals>\n"
+[3]:\t<number of meals>\n"
 
 # define BOlD_RED	"\033[1;31m"
 # define BOLD_CYAN	"\033[1;36m"

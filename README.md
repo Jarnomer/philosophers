@@ -33,7 +33,13 @@
 
 Goal of the project is to explore [dining philosophers problem](https://en.wikipedia.org/wiki/Dining_philosophers_problem) in multithreaded environment.
 
+There is a set amount of philosophers and `equal` amount of `forks`. Each philosopher needs `two` forks to begin the meal.
 
+Eating the meal takes a set duration in `milliseconds`. After eating, philosopher `sleeps` and finally commences `thinking` again.
+
+Philosopher will die if it can't `finish a meal` within time to die and thus `ending` the process.
+
+Countdown for this begins once philosopher has `taken forks` and began to eat.
 
 ## 🛠️ Build
 
@@ -59,7 +65,7 @@ cd philosophers && make all
 | 200   | Time to sleep (ms)     |
 | 4     | Number of meals (optional)       |
 
-If `meals count` is not provided and `time to die` is long enough, simulation will run forever.
+If `meals count` is not provided and `time to die` is long enough, the simulation will run infinitely.
 
 ```bash
 ./philo 2 610 300 200 3
@@ -69,9 +75,7 @@ If `meals count` is not provided and `time to die` is long enough, simulation wi
 ./philo 2 610 300 200
 ```
 
-Philosopher will die if it can't `finish a meal` within time to die and `ends` the process.
-
-Counting begins once philosopher has `taken forks` and began to eat.
+Every `event` is printed to `STDOUT`. Here is an example where philosopher dies. 
 
 ```bash
 ./philo 2 500 300 200
