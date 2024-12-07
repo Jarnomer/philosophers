@@ -10,19 +10,19 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include <philo.h>
 
 int	main(int argc, char **argv)
 {
 	t_data	data;
 
 	if (argc < 5 || argc > 6)
-		return (print_usage(EXIT_FAILURE));
-	if (valid_args(argc, argv) != SUCCESS)
-		return (EINVAL);
-	if (init_data(&data, argc, argv) != SUCCESS)
-		return (ENOMEM);
-	if (process_manager(&data) != SUCCESS)
-		return (data.excode);
-	return (EXIT_SUCCESS);
+		return (print_usage(ERR_ARGC));
+	if (valid_args(argc, argv) != 0)
+		return (ERR_ARGV);
+	if (init_data(&data, argc, argv) != 0)
+		return (ERR_MEM);
+	if (process_manager(&data) != 0)
+		return (data.exitcode);
+	return (NOERROR);
 }

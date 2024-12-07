@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include <philo.h>
 
 void	threads_synchronized(t_data *data)
 {
@@ -33,11 +33,11 @@ bool	process_failed(t_data *data)
 	return (get_status(&data->stat[ST_ERR], &data->mutex[MX_ERR], data));
 }
 
-void	error_occured(t_data *data, int errcode)
+void	process_failure(t_data *data, int errcode)
 {
 	operate_mutex(&data->mutex[MX_ERR], OP_LOCK, data);
 	data->stat[ST_ERR] = true;
-	if (data->excode == SUCCESS)
-		data->excode = errcode;
+	if (data->exitcode == 0)
+		data->exitcode = errcode;
 	operate_mutex(&data->mutex[MX_ERR], OP_UNLOCK, data);
 }

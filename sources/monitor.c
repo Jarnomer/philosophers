@@ -10,54 +10,48 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include <philo.h>
 
-static t_ul	updated_runtime(t_data *data)
+static long	refresh_uptime(t_data *data)
 {
-	set_timer(&data->uptime,
-		update_time(OP_MSEC, data) - data->epoch,
+	set_timer(&data->uptime, operate_timer(OP_MSEC, data) - data->epoch,
 		&data->mutex[MX_EPCH], data);
 	return (get_timer(&data->uptime, &data->mutex[MX_EPCH], data));
 }
 
-static inline void	set_finished(t_data *data)
-{
-	set_status(&data->stat[ST_DONE], true, &data->mutex[MX_DONE], data);
-}
-
 static bool	philosophers_full(t_data *data)
 {
-	t_philo	*phil;
-	int		done;
+	t_philo	*philo;
+	int		finished_philos;
 	int		i;
 
 	i = 0;
-	done = 0;
-	while (i < data->input->philos)
+	finished_philos = 0;
+	while (i < data->input->philo_count)
 	{
-		phil = data->phils + i++;
-		if (get_status(&phil->stat[ST_FULL], &phil->mutex[MX_FULL], data))
-			done++;
+		philo = data->philos + i++;
+		if (get_status(&philo->stat[ST_FULL], &philo->mutex[MX_FULL], data))
+			finished_philos++;
 	}
-	if (done == data->input->philos)
+	if (finished_philos == data->input->philo_count)
 		return (true);
 	return (false);
 }
 
 static bool	philosopher_death(t_data *data)
 {
-	t_ul	mealtime;
-	t_philo	*phil;
+	long	mealtime;
+	t_philo	*philo;
 	int		i;
 
 	i = 0;
-	while (i < data->input->philos)
+	while (i < data->input->philo_count)
 	{
-		phil = data->phils + i++;
-		mealtime = get_timer(&phil->mealtime, &phil->mutex[MX_TIME], data);
-		if (updated_runtime(data) - mealtime > (t_ul)data->input->die)
+		philo = data->philos + i++;
+		mealtime = get_timer(&philo->mealtime, &philo->mutex[MX_TIME], data);
+		if (refresh_uptime(data) - mealtime > (long)data->input->time_to_die)
 		{
-			log_status(phil, ST_DIE);
+			log_status(philo, ST_DIE);
 			return (true);
 		}
 	}

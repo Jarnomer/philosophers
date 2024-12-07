@@ -10,26 +10,51 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include <philo.h>
 
 int	print_usage(int errcode)
 {
-	printf("%s%s%s", RB, "Error: ", T);
-	printf("%s%s%s", Y, MSG_ARGC, T);
-	printf("%s%s%s", RB, "Example: ", T);
-	printf("%s%s%s", P, MSG_EXAM, T);
-	printf("%s%s%s", G, MSG_HELP, T);
+	printf("%s%s%s", BOlD_RED, "Error: ", RESET);
+	printf("%s%s%s", YELLOW, MSG_ARGC, RESET);
+	printf("%s%s%s", BOlD_RED, "Example: ", RESET);
+	printf("%s%s%s", BOLD_CYAN, MSG_EXAM, RESET);
+	printf("%s%s%s", GREEN, MSG_HELP, RESET);
 	return (errcode);
 }
 
-int	free_mem(int errcode, t_data *data, char *msg)
+static inline int	ft_isdigit(int c)
 {
-	if (msg != NULL)
-		log_error(FAILURE, msg, "", "");
+	return ('0' <= c && c <= '9');
+}
+
+long	custom_atol(const char *str)
+{
+	long	num;
+
+	num = 0;
+	while (ft_isdigit(*str))
+	{
+		num = num * 10 + *str++ - '0';
+		if (num > INT_MAX)
+			return (-1);
+	}
+	if (num == 0)
+		return (-1);
+	return (num);
+}
+
+void	process_free(t_data *data)
+{
 	if (!data)
-		return (errcode);
+		return ;
 	free(data->input);
-	free(data->phils);
+	free(data->philos);
 	free(data->forks);
+}
+
+int	error_exit(int errcode, t_data *data, char *msg)
+{
+	log_error(errcode, msg, "", "");
+	process_free(data);
 	return (errcode);
 }

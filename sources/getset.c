@@ -10,7 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include <philo.h>
+
+void	set_finished(t_data *data)
+{
+	set_status(&data->stat[ST_DONE], true, &data->mutex[MX_DONE], data);
+}
 
 void	set_status(bool *dst, bool val, t_mtx *mutex, t_data *data)
 {
@@ -29,16 +34,16 @@ bool	get_status(bool *val, t_mtx *mutex, t_data *data)
 	return (ret);
 }
 
-void	set_timer(t_ul *dst, t_ul val, t_mtx *mutex, t_data *data)
+void	set_timer(long *dst, long val, t_mtx *mutex, t_data *data)
 {
 	operate_mutex(mutex, OP_LOCK, data);
 	*dst = val;
 	operate_mutex(mutex, OP_UNLOCK, data);
 }
 
-t_ul	get_timer(t_ul *val, t_mtx *mutex, t_data *data)
+long	get_timer(long *val, t_mtx *mutex, t_data *data)
 {
-	t_ul	ret;
+	long	ret;
 
 	operate_mutex(mutex, OP_LOCK, data);
 	ret = *val;

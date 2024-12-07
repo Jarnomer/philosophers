@@ -10,17 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include <philo.h>
 
-static char	*err_msg(int stat, t_operator opr)
+static char	*err_msg(int exitcode, t_operator opr)
 {
-	if (stat == ESRCH && (opr == OP_DETACH || opr == OP_JOIN))
+	if (exitcode == ESRCH && (opr == OP_DETACH || opr == OP_JOIN))
 		return ("No thread with ID could be found.\n");
-	else if (stat == EINVAL && (opr == OP_DETACH || opr == OP_JOIN))
+	else if (exitcode == EINVAL && (opr == OP_DETACH || opr == OP_JOIN))
 		return ("Thread is not a joinable thread.\n");
-	else if (stat == EDEADLK && opr == OP_JOIN)
+	else if (exitcode == EDEADLK && opr == OP_JOIN)
 		return ("Deadlock was detected.\n");
-	else if (stat == EAGAIN && opr == OP_CREATE)
+	else if (exitcode == EAGAIN && opr == OP_CREATE)
 		return ("Insufficient resources to create another thread.\n");
 	else
 		return ("Unhandled <operate_thread> error occured.\n");
@@ -36,12 +36,12 @@ static char	*fn_name(t_operator opr)
 		return ("<pthread_join>: ");
 }
 
-static void	wrapper(int stat, t_operator opr, t_data *data)
+static void	err_chk(int exitcode, t_operator opr, t_data *data)
 {
-	if (stat != SUCCESS)
+	if (exitcode != 0)
 	{
-		log_error(FAILURE, MSG_SYSC, fn_name(opr), err_msg(stat, opr));
-		error_occured(data, stat);
+		log_error(ERR_SYSC, MSG_SYSC, fn_name(opr), err_msg(exitcode, opr));
+		process_failure(data, exitcode);
 	}
 }
 
@@ -51,21 +51,21 @@ void	operate_thread(pthread_t *tid, t_operator opr, t_data *data, void *p)
 
 	if (opr == OP_CREATE)
 	{
-		if (data->input->philos == 1 && !i)
-			wrapper(pthread_create(tid, NULL, process_loner, p), opr, data);
-		else if (i < data->input->philos)
-			wrapper(pthread_create(tid, NULL, process_routine, p), opr, data);
+		if (data->input->philo_count == 1 && !i)
+			err_chk(pthread_create(tid, NULL, process_loner, p), opr, data);
+		else if (i < data->input->philo_count)
+			err_chk(pthread_create(tid, NULL, process_routine, p), opr, data);
 		else
-			wrapper(pthread_create(tid, NULL, process_monitor, p), opr, data);
+			err_chk(pthread_create(tid, NULL, process_monitor, p), opr, data);
 		i++;
 	}
 	else if (opr == OP_JOIN)
-		wrapper(pthread_join(*tid, NULL), opr, data);
+		err_chk(pthread_join(*tid, NULL), opr, data);
 	else if (opr == OP_DETACH)
-		wrapper(pthread_detach(*tid), opr, data);
+		err_chk(pthread_detach(*tid), opr, data);
 	else
 	{
-		log_error(FAILURE, MSG_OPER, "<operate_thread>", "");
-		error_occured(data, EXIT_FAILURE);
+		log_error(ERR_OPER, MSG_OPER, "<operate_thread>", "");
+		process_failure(data, ERR_OPER);
 	}
 }

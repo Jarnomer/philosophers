@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include <philo.h>
 
-static void	print_message(int id, t_ul time, t_state state, t_data *data)
+static void	print_message(int id, long time, t_state state, t_data *data)
 {
 	if (state == ST_TAKE)
 		printf("%06lu %-4d has taken fork\n", time, id);
@@ -26,27 +26,27 @@ static void	print_message(int id, t_ul time, t_state state, t_data *data)
 		printf("%06lu %-4d died\n", time, id);
 	else
 	{
-		log_error(FAILURE, MSG_STAT, "<print_message>", "");
-		error_occured(data, EXIT_FAILURE);
+		log_error(ERR_STAT, MSG_STAT, "<print_message>", "");
+		process_failure(data, ERR_STAT);
 	}
 }
 
-void	log_status(t_philo *phil, t_state state)
+void	log_status(t_philo *philo, t_state state)
 {
 	t_data	*data;
-	t_ul	uptime;
+	long	uptime;
 
-	data = phil->data;
+	data = philo->data;
 	uptime = get_timer(&data->uptime, &data->mutex[MX_EPCH], data);
 	operate_mutex(&data->mutex[MX_LOG], OP_LOCK, data);
 	if (!process_finished(data) && !process_failed(data))
-		print_message(phil->id, uptime, state, data);
+		print_message(philo->id, uptime, state, data);
 	operate_mutex(&data->mutex[MX_LOG], OP_UNLOCK, data);
 }
 
-static int	ft_strlen(const char *s)
+static size_t	ft_strlen(const char *s)
 {
-	int	len;
+	size_t	len;
 
 	if (!s)
 		return (0);
@@ -63,13 +63,13 @@ static inline void	ft_putstr_fd(char *s, int fd)
 
 int	log_error(int errcode, char *s1, char *s2, char *s3)
 {
-	ft_putstr_fd(RB, STDERR_FILENO);
+	ft_putstr_fd(BOlD_RED, STDERR_FILENO);
 	ft_putstr_fd("Error: ", STDERR_FILENO);
-	ft_putstr_fd(T, STDERR_FILENO);
-	ft_putstr_fd(Y, STDERR_FILENO);
+	ft_putstr_fd(RESET, STDERR_FILENO);
+	ft_putstr_fd(YELLOW, STDERR_FILENO);
 	ft_putstr_fd(s1, STDERR_FILENO);
 	ft_putstr_fd(s2, STDERR_FILENO);
 	ft_putstr_fd(s3, STDERR_FILENO);
-	ft_putstr_fd(T, STDERR_FILENO);
+	ft_putstr_fd(RESET, STDERR_FILENO);
 	return (errcode);
 }

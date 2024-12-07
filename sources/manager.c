@@ -10,55 +10,55 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include <philo.h>
 
 static void	destroy_mutexes(t_data *data)
 {
-	t_philo	*phil;
+	t_philo	*philo;
 	int		i;
 	int		j;
 
 	i = 0;
-	while (i < data->input->philos)
+	while (i < data->input->philo_count)
 	{
 		j = 0;
-		phil = data->phils + i;
-		while (j < MTX_NUM_P)
-			operate_mutex(&phil->mutex[j++], OP_DESTROY, data);
+		philo = data->philos + i;
+		while (j < MTX_COUNT_PHILO)
+			operate_mutex(&philo->mutex[j++], OP_DESTROY, data);
 		operate_mutex(&data->forks[i++], OP_DESTROY, data);
 	}
-	i = MTX_NUM_D;
+	i = MTX_COUNT_DATA;
 	while (--i >= 0)
 		operate_mutex(&data->mutex[i], OP_DESTROY, data);
 }
 
 static void	join_threads(t_data *data)
 {
-	t_philo	*phil;
+	t_philo	*philo;
 	int		i;
 
 	i = 0;
-	while (i < data->input->philos)
+	while (i < data->input->philo_count)
 	{
-		phil = data->phils + i++;
-		operate_thread(&phil->tid, OP_JOIN, data, NULL);
+		philo = data->philos + i++;
+		operate_thread(&philo->tid, OP_JOIN, data, NULL);
 	}
-	operate_thread(&data->tid, OP_DETACH, data, NULL);
+	operate_thread(&data->monitor, OP_DETACH, data, NULL);
 }
 
 static void	init_threads(t_data *data)
 {
-	t_philo	*phil;
+	t_philo	*philo;
 	int		i;
 
 	i = 0;
-	while (i < data->input->philos && !data->stat[ST_ERR])
+	while (i < data->input->philo_count && data->stat[ST_ERR] == false)
 	{
-		phil = data->phils + i++;
-		operate_thread(&phil->tid, OP_CREATE, data, phil);
+		philo = data->philos + i++;
+		operate_thread(&philo->tid, OP_CREATE, data, philo);
 	}
-	if (!data->stat[ST_ERR])
-		operate_thread(&data->tid, OP_CREATE, data, data);
+	if (data->stat[ST_ERR] == false)
+		operate_thread(&data->monitor, OP_CREATE, data, data);
 }
 
 static void	init_mutexes(t_data *data)
@@ -67,15 +67,16 @@ static void	init_mutexes(t_data *data)
 	int	j;
 
 	i = 0;
-	while (i < MTX_NUM_D && !data->stat[ST_ERR])
+	while (i < MTX_COUNT_DATA && data->stat[ST_ERR] == false)
 		operate_mutex(&data->mutex[i++], OP_INIT, data);
 	i = 0;
-	while (i < data->input->philos && !data->stat[ST_ERR])
+	while (i < data->input->philo_count && data->stat[ST_ERR] == false)
 	{
 		j = 0;
-		while (j < MTX_NUM_P && !data->stat[ST_ERR])
-			operate_mutex(&(data->phils + i)->mutex[j++], OP_INIT, data);
-		operate_mutex(&data->forks[i++], OP_INIT, data);
+		while (j < MTX_COUNT_PHILO && data->stat[ST_ERR] == false)
+			operate_mutex(&(data->philos + i)->mutex[j++], OP_INIT, data);
+		if (data->stat[ST_ERR] == false)
+			operate_mutex(&data->forks[i++], OP_INIT, data);
 	}
 }
 
@@ -83,10 +84,10 @@ int	process_manager(t_data *data)
 {
 	init_mutexes(data);
 	init_threads(data);
-	data->epoch = update_time(OP_MSEC, data);
+	data->epoch = operate_timer(OP_MSEC, data);
 	threads_synchronized(data);
 	join_threads(data);
 	destroy_mutexes(data);
-	free_mem(0, data, NULL);
-	return (data->excode);
+	process_free(data);
+	return (data->exitcode);
 }
