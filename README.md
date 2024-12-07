@@ -157,7 +157,7 @@ void percision_sleep(long target, t_data *data)
 }
 ```
 
-Main `data` and `each` philosopher have `enumarated` boolean statuses and their corresponding mutexes.
+Main `data` and `each` philosopher have `enumerated` boolean statuses and their corresponding mutexes.
 
 ```c
 typedef struct s_data
@@ -165,7 +165,7 @@ typedef struct s_data
   [...]
   t_mtx   mutex[MTX_COUNT_DATA];
   bool    stat[STT_COUNT_DATA];
-}	t_data;
+} t_data;
 ```
 
 These are used by `getset` functions and `synchro` utilities to view and change process states.
