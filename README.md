@@ -33,13 +33,13 @@
 
 Goal of the project is to explore [dining philosophers problem](https://en.wikipedia.org/wiki/Dining_philosophers_problem) in multithreaded environment.
 
-There is a set amount of philosophers and `equal` amount of `forks`. Each philosopher needs `two` forks to begin the meal.
+For each philosophers, there is `equal` amount of `forks` and they need `two` forks to begin the meal.
 
-Eating the meal takes a set duration in `milliseconds`. After eating, philosopher `sleeps` and finally commences `thinking` again.
+Eating takes a set duration in `milliseconds`. Then they `sleep` and finally commence `thinking` again.
 
-Philosopher will die if it can't `finish a meal` within time to die and thus `ending` the process.
+Philosopher will die if it can't `finish a meal` within time to die since `taking forks`.
 
-Countdown for this begins once philosopher has `taken forks` and began to eat.
+Dining will `end` if any of the philosophers is `death` or everyone has `eaten` the set amount of `meals`.
 
 ## 🛠️ Build
 
