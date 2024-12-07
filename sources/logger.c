@@ -15,15 +15,15 @@
 static void	print_message(int id, long time, t_state state, t_data *data)
 {
 	if (state == ST_TAKE)
-		printf("%06lu %-4d has taken fork\n", time, id);
+		printf("%lu %d has taken fork\n", time, id);
 	else if (state == ST_EAT)
-		printf("%06lu %-4d is eating\n", time, id);
+		printf("%lu %d is eating\n", time, id);
 	else if (state == ST_SLP)
-		printf("%06lu %-4d is sleeping\n", time, id);
+		printf("%lu %d is sleeping\n", time, id);
 	else if (state == ST_THK)
-		printf("%06lu %-4d is thinking\n", time, id);
+		printf("%lu %d is thinking\n", time, id);
 	else if (state == ST_DIE)
-		printf("%06lu %-4d died\n", time, id);
+		printf("%lu %d died\n", time, id);
 	else
 	{
 		log_error(ERR_STAT, MSG_STAT, "<print_message>", "");

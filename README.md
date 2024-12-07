@@ -3,7 +3,7 @@
 </h1>
 
 <p align="center">
-    <b><i>Answering philosopher question with multithreading.</i></b><br>
+    <b><i>Solving dining philosophers with multithreading 🧵.</i></b><br>
 </p>
 
 <p align="center">
@@ -57,15 +57,35 @@ cd philosophers && make all
 | 200   | Time to sleep (ms)     |
 | 4     | Number of meals (optional)       |
 
-Incorrect input results to `Error`.
+If `meals count` is not provided and `time to die` is long enough, simulation will run forever.
 
 ```bash
 ./philo 2 610 300 200 3
 ```
 
 ```bash
-./philo 2 600 300 200
+./philo 2 610 300 200
 ```
+
+Philosopher will die if it can't `finish a meal` within time to die and `ends` the process.
+
+```bash
+./philo 2 500 300 200
+```
+
+```bash
+0 2 is thinking
+0 1 has taken fork
+0 1 has taken fork
+0 1 is eating
+301 1 is sleeping
+301 2 has taken fork
+301 2 has taken fork
+301 2 is eating
+501 1 died
+```
+
+Incorrect input results to `Error`.
 
 ## 🚀 Details
 
@@ -73,9 +93,9 @@ Incorrect input results to `Error`.
 
 ## ♻️ Resources
 
-[Unix Threads in C](https://www.youtube.com/watch?v=d9s_d28yJq0&list=PLfqABt5AS4FmuQf70psXrsMLEDQXNkLq2) CodeVault's video playlist on multithreading in C.
+[Unix Threads in C](https://www.youtube.com/watch?v=d9s_d28yJq0&list=PLfqABt5AS4FmuQf70psXrsMLEDQXNkLq2) video playlist on multithreading in C.
 
-[The dining Philosophers in C](https://www.youtube.com/watch?v=zOpzGHwJ3MU) detailed video explanation of philosopher issue.
+[The dining Philosophers in C](https://www.youtube.com/watch?v=zOpzGHwJ3MU) detailed video explanation of dining philosophers.
 
 [Philosophers visualizer](https://nafuka11.github.io/philosophers-visualizer-v2/) fantastic tool to visualize your philosophers.
 
