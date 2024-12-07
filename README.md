@@ -37,7 +37,7 @@ For each philosophers, there is `equal` amount of `forks` and they need `two` fo
 
 Eating takes a set duration in `milliseconds`. Then they `sleep` and finally commence `thinking` again.
 
-Philosopher will die if it can't `finish a meal` within time to die since `taking forks`.
+Philosopher will die if it can't `begin` a meal within time to die since `taking forks`.
 
 Dining will `end` if any of the philosophers is `death` or everyone has `eaten` the set amount of `meals`.
 
@@ -105,7 +105,85 @@ Error: abc: Is invalid argument
 
 ## 🚀 Details
 
-[RESERVED]
+After initialization the `process manager` is responsible for managing `threads` and `mutexes`.
+
+To help this and overall process, `operater` functions are used as wrappers.
+
+```c
+operate_thread(&data->monitor, OP_DETACH, data, NULL);
+```
+
+```c
+operate_mutex(&data->mutex[i++], OP_INIT, data);
+```
+
+Lastly the `monitor` thread is created to overview the dining `routine`.
+
+```c
+void *process_monitor(void *param)
+{
+  t_data	*data;
+
+  data = (t_data *)param;
+  threads_spinlocked(data);
+  while (true)
+  {
+    if (process_finished(data)
+      || process_failed(data))
+      break ;
+    else if (philosopher_death(data)
+      || philosophers_full(data))
+      set_finished(data);
+  }
+  return (NULL);
+}
+```
+
+Since `usleep` is not natively precise enough, custom `precision_sleep` is used instead.
+
+```c
+void percision_sleep(long target, t_data *data)
+{
+  long	start;
+
+  target = convert_to_micro_second(target);
+  start = operate_timer(OP_USEC, data);
+  while (gettime(start, data) < target)
+  {
+    if (process_finished(data) || process_failed(data))
+      break ;
+    usleep(500);
+  }
+}
+```
+
+Main `data` and `each` philosopher have `enumarated` boolean statuses and their corresponding mutexes.
+
+```c
+typedef struct s_data
+{
+  [...]
+  t_mtx   mutex[MTX_COUNT_DATA];
+  bool    stat[STT_COUNT_DATA];
+}	t_data;
+```
+
+These are used by `getset` functions and `synchro` utilities to view and change process states.
+
+```c
+void threads_synchronized(t_data *data)
+{
+  set_status(&data->stat[ST_SYNC], true, &data->mutex[MX_SYNC], data);
+}
+```
+
+```c
+void threads_spinlocked(t_data *data)
+{
+  while (!get_status(&data->stat[ST_SYNC], &data->mutex[MX_SYNC], data))
+    true ;
+}
+```
 
 ## ♻️ Resources
 
