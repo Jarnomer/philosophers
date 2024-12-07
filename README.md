@@ -3,7 +3,7 @@
 </h1>
 
 <p align="center">
-    <b><i>Solving dining philosophers with multithreading 🧵.</i></b><br>
+    <b><i>Solving concurrency synchronization issues in multithreading 🧵.</i></b><br>
 </p>
 
 <p align="center">
@@ -31,7 +31,9 @@
 
 ## 📝 General
 
-Goal of the project.
+Goal of the project is to explore [dining philosophers problem](https://en.wikipedia.org/wiki/Dining_philosophers_problem) in multithreaded environment.
+
+
 
 ## 🛠️ Build
 
@@ -69,6 +71,8 @@ If `meals count` is not provided and `time to die` is long enough, simulation wi
 
 Philosopher will die if it can't `finish a meal` within time to die and `ends` the process.
 
+Counting begins once philosopher has `taken forks` and began to eat.
+
 ```bash
 ./philo 2 500 300 200
 ```
@@ -86,6 +90,14 @@ Philosopher will die if it can't `finish a meal` within time to die and `ends` t
 ```
 
 Incorrect input results to `Error`.
+
+```bash
+./philo 2 500 300 200 abc
+```
+
+```bash
+Error: abc: Is invalid argument
+```
 
 ## 🚀 Details
 
