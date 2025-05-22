@@ -80,7 +80,7 @@ static void	init_mutexes(t_data *data)
 	}
 }
 
-int	process_manager(t_data *data)
+int	run_simulation(t_data *data)
 {
 	init_mutexes(data);
 	init_threads(data);

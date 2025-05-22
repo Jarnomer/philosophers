@@ -120,20 +120,21 @@ operate_mutex(&data->mutex[i++], OP_INIT, data);
 Lastly the `monitor` thread is created to overview the dining `routine`.
 
 ```c
-void *process_monitor(void *param)
+void *run_monitor(void *param)
 {
-  t_data	*data;
+  t_data *data;
+  long   current_time;
 
   data = (t_data *)param;
   threads_spinlocked(data);
   while (true)
   {
-    if (process_finished(data)
-      || process_failed(data))
+    if (process_finished(data) || process_failed(data))
       break ;
-    else if (philosopher_death(data)
-      || philosophers_full(data))
+    current_time = get_runtime(data);
+    if (philosopher_death(data, current_time) || philosophers_full(data))
       set_finished(data);
+    usleep(500);
   }
   return (NULL);
 }
@@ -142,15 +143,16 @@ void *process_monitor(void *param)
 Since `usleep` is not natively precise enough, custom `precision_sleep` is used instead.
 
 ```c
-void percision_sleep(long target, t_data *data)
+void precise_sleep(int target_time, t_data *data)
 {
-  long	start;
+  long start;
+  long current;
 
-  target = convert_to_micro_second(target);
-  start = operate_timer(OP_USEC, data);
-  while (gettime(start, data) < target)
+  start = operate_timer(OP_MSEC, data);
+  while (true)
   {
-    if (process_finished(data) || process_failed(data))
+    current = operate_timer(OP_MSEC, data);
+    if (current - start >= target_time)
       break ;
     usleep(500);
   }

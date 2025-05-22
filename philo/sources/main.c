@@ -22,7 +22,7 @@ int	main(int argc, char **argv)
 		return (ERR_ARGV);
 	if (init_data(&data, argc, argv) != 0)
 		return (ERR_MEM);
-	if (process_manager(&data) != 0)
+	if (run_simulation(&data) != 0)
 		return (data.exitcode);
 	return (NOERROR);
 }

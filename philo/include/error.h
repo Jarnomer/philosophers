@@ -31,7 +31,7 @@
 [200]:\t<time to sleep>\n\
 [3]:\t<number of meals>\n"
 
-# define BOlD_RED	"\033[1;31m"
+# define BOLD_RED	"\033[1;31m"
 # define BOLD_CYAN	"\033[1;36m"
 # define GREEN		"\033[0;32m"
 # define YELLOW		"\033[0;33m"

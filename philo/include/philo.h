@@ -112,11 +112,10 @@ int		init_data(t_data *data, int argc, char **argv);
 
 // simulation
 
-int		process_manager(t_data *data);
-void	*process_monitor(void *param);
-void	*process_routine(void *param);
-void	*process_loner(void *param);
-void	percision_sleep(long goal, t_data *data);
+int		run_simulation(t_data *data);
+void	*run_monitor(void *param);
+void	*run_routine(void *param);
+void	precise_sleep(long goal, t_data *data);
 
 // operators
 
@@ -148,7 +147,7 @@ void	process_failure(t_data *data, int errcode);
 // utils
 
 int		print_usage(int errcode);
-long	custom_atol(const char *str);
+long	ft_atol(const char *str);
 int		error_exit(int errcode, t_data *data, char *msg);
 void	process_free(t_data *data);
 

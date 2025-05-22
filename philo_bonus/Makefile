@@ -43,16 +43,12 @@ MAKEFLAGS  += --no-print-directory -j4
 SOURCES := main \
            valid \
            init \
-           manager \
-           routine \
-           monitor \
-           sleep \
-           opmutex \
+           simu \
            opthread \
+           opsemap \
            optimer \
-           getset \
-           synchro \
            logger \
+           free \
            utils
 
 SOURCES := $(addsuffix .c, $(SOURCES))
@@ -86,10 +82,11 @@ debug: CFLAGS += $(DEBUGFLAGS)
 debug: re
 
 nm:
-	$(foreach d, $(HEADERDIR), $(foreach h, $(wildcard $(d)/*), \
-		norminette -R CheckDefine $(h);))
-	$(foreach d, $(SOURCEDIR), $(foreach s, $(wildcard $(d)/*), \
-		norminette -R CheckForbiddenSourceHeader $(s);))
+ifneq ($(shell command -v norminette >/dev/null 2>&1 && echo 1 || echo 0), 1)
+	@printf "$(R)$(B)Error: norminette: $(Y)command not found$(T)\n"; exit 1
+endif
+	$(foreach h, $(HEADERDIR), norminette -R CheckDefine $(h))
+	$(foreach s, $(SOURCEDIR), norminette -R CheckForbiddenSourceHeader $(s))
 
 leaks: all
 	valgrind $(VLGFLAGS) $(TESTCASE)

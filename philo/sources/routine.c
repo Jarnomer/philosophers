@@ -12,29 +12,12 @@
 
 #include <philo.h>
 
-void	*process_loner(void *param)
-{
-	t_philo	*philo;
-	t_data	*data;
-
-	philo = (t_philo *)param;
-	data = philo->data;
-	threads_spinlocked(data);
-	log_status(philo, ST_TAKE);
-	percision_sleep(data->input->time_to_die, data);
-	while (true)
-		if (process_finished(data)
-			|| process_failed(data))
-			break ;
-	return (NULL);
-}
-
 static void	sleep_routine(t_philo *philo, t_data *data)
 {
 	log_status(philo, ST_SLP);
-	percision_sleep(data->input->time_to_sleep, data);
+	precise_sleep(data->input->time_to_sleep, data);
 	log_status(philo, ST_THK);
-	percision_sleep(1, data);
+	precise_sleep(1, data);
 }
 
 static void	handle_forks(t_philo *philo, t_state state, t_data *data)
@@ -65,14 +48,25 @@ static void	eat_routine(t_philo *philo, t_data *data)
 		operate_timer(OP_MSEC, data) - data->epoch,
 		&philo->mutex[MX_TIME], data);
 	log_status(philo, ST_EAT);
-	percision_sleep(data->input->time_to_eat, data);
+	precise_sleep(data->input->time_to_eat, data);
 	handle_forks(philo, ST_PUT, data);
 	if (--philo->meals_to_eat == 0)
 		set_status(&philo->stat[ST_FULL], true,
 			&philo->mutex[MX_FULL], data);
 }
 
-void	*process_routine(void *param)
+static void	*process_loner(t_philo *philo)
+{
+	t_data	*data;
+
+	data = philo->data;
+	log_status(philo, ST_TAKE);
+	while (!process_finished(data) && !process_failed(data))
+		usleep(1000);
+	return (NULL);
+}
+
+void	*run_routine(void *param)
 {
 	t_philo	*philo;
 	t_data	*data;
@@ -80,6 +74,8 @@ void	*process_routine(void *param)
 	philo = (t_philo *)param;
 	data = philo->data;
 	threads_spinlocked(data);
+	if (data->input->philo_count == 1)
+		return (process_loner(philo));
 	if (philo->id % 2 == 0)
 	{
 		log_status(philo, ST_THK);
@@ -87,8 +83,7 @@ void	*process_routine(void *param)
 	}
 	while (true)
 	{
-		if (process_finished(data)
-			|| process_failed(data))
+		if (process_finished(data) || process_failed(data))
 			break ;
 		eat_routine(philo, data);
 		sleep_routine(philo, data);

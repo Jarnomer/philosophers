@@ -63,7 +63,7 @@ static inline void	ft_putstr_fd(char *s, int fd)
 
 int	log_error(int errcode, char *s1, char *s2, char *s3)
 {
-	ft_putstr_fd(BOlD_RED, STDERR_FILENO);
+	ft_putstr_fd(BOLD_RED, STDERR_FILENO);
 	ft_putstr_fd("Error: ", STDERR_FILENO);
 	ft_putstr_fd(RESET, STDERR_FILENO);
 	ft_putstr_fd(YELLOW, STDERR_FILENO);
