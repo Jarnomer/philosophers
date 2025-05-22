@@ -57,15 +57,6 @@ static bool	philosopher_death(t_data *data, long current_time)
 	return (false);
 }
 
-static inline long	get_runtime(t_data *data)
-{
-	long	current_time;
-
-	current_time = operate_timer(OP_MSEC, data) - data->epoch;
-	set_timer(&data->uptime, current_time, &data->mutex[MX_EPCH], data);
-	return (current_time);
-}
-
 void	*run_monitor(void *param)
 {
 	t_data	*data;
@@ -77,7 +68,8 @@ void	*run_monitor(void *param)
 	{
 		if (process_finished(data) || process_failed(data))
 			break ;
-		current_time = get_runtime(data);
+		current_time = operate_timer(OP_MSEC, data) - data->epoch;
+		set_timer(&data->uptime, current_time, &data->mutex[MX_EPCH], data);
 		if (philosopher_death(data, current_time) || philosophers_full(data))
 			set_finished(data);
 		usleep(500);
