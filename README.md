@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Score-100%2F100-lightgreen?style=for-the-badge" alt="score">
+  <img src="https://img.shields.io/badge/Score-125%2F100-lightgreen?style=for-the-badge" alt="score">
   <img src="https://img.shields.io/github/languages/top/Jarnomer/philosophers?style=for-the-badge&logo=c&label=%20&labelColor=gray&color=lightblue" alt="GitHub top language">
     <img src="https://img.shields.io/github/languages/code-size/Jarnomer/philosophers?style=for-the-badge&color=lightyellow" alt="GitHub code size in bytes">
   <img src="https://img.shields.io/github/directory-file-count/Jarnomer/philosophers/sources?style=for-the-badge&label=sources&color=pink" alt="GitHub repo file or directory count (in path)">
