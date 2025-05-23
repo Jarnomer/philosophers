@@ -90,25 +90,24 @@ typedef struct s_data
 	int			exitcode;
 }	t_data;
 
+int		valid_args(int argc, char **argv);
 int		init_data(t_data *data, int argc, char **argv);
 
 int		run_simulation(t_data *data);
 void	*run_monitor(void *arg);
+void	run_routine(t_philo *philo);
 
-void	operate_thread(pthread_t *tid, t_operator opr, t_data *data, void *p);
 void	operate_semaphore(sem_t *sem, char *name, t_operator opr, t_data *data);
+void	operate_thread(pthread_t *tid, t_operator opr, t_data *data, void *p);
 long	operate_timer(t_operator opr, t_data *data);
 
-void	precise_sleep(int target_time, t_data *data);
-
-int		log_error(int errcode, char *s1, char *s2, char *s3);
 void	log_status(t_philo *philo, t_state state);
+int		log_error(int errcode, char *s1, char *s2, char *s3);
 
+void	precise_sleep(int target_time, t_data *data);
 void	error_exit(int errcode, t_data *data, char *msg);
 void	process_free(t_data *data);
-
-int		valid_args(int argc, char **argv);
-long	ft_atol(const char *str);
 int		print_usage(int errcode);
+long	ft_atol(const char *str);
 
 #endif

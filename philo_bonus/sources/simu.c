@@ -25,8 +25,7 @@ void	*run_monitor(void *arg)
 		current_time = operate_timer(OP_MSEC, data);
 		if (current_time - philo->last_meal > (long)data->input->time_to_die)
 		{
-			operate_semaphore(data->write, NULL, OP_WAIT, data);
-			printf("%ld %d died\n", current_time - data->start_time, philo->id);
+			log_status(philo, ST_DIE);
 			operate_semaphore(data->death, NULL, OP_POST, data);
 			break ;
 		}
@@ -35,55 +34,9 @@ void	*run_monitor(void *arg)
 	return (NULL);
 }
 
-static void	handle_forks(t_philo *philo, t_data *data)
-{
-	operate_semaphore(data->forks, NULL, OP_WAIT, data);
-	log_status(philo, ST_TAKE);
-	operate_semaphore(data->forks, NULL, OP_WAIT, data);
-	log_status(philo, ST_TAKE);
-}
-
-static void	eat_routine(t_philo *philo, t_data *data)
-{
-	handle_forks(philo, data);
-	philo->last_meal = operate_timer(OP_MSEC, data);
-	log_status(philo, ST_EAT);
-	precise_sleep(data->input->time_to_eat, data);
-	philo->meals_eaten++;
-	if (philo->meals_eaten >= data->input->meals_count
-		&& data->input->meals_count != -1)
-		operate_semaphore(data->meals, NULL, OP_POST, data);
-	operate_semaphore(data->forks, NULL, OP_POST, data);
-	operate_semaphore(data->forks, NULL, OP_POST, data);
-}
-
-static void	run_routine(t_philo *philo)
-{
-	t_data		*data;
-
-	data = philo->data;
-	philo->last_meal = operate_timer(OP_MSEC, data);
-	operate_thread(&philo->tid, OP_CREATE, data, philo);
-	if (philo->id % 2 == 0)
-	{
-		log_status(philo, ST_THK);
-		usleep(500);
-	}
-	while (true)
-	{
-		eat_routine(philo, data);
-		log_status(philo, ST_SLP);
-		precise_sleep(data->input->time_to_sleep, data);
-		log_status(philo, ST_THK);
-	}
-	operate_thread(&philo->tid, OP_DETACH, data, NULL);
-	exit(EXIT_SUCCESS);
-}
-
-int	run_simulation(t_data *data)
+static void	start_philosophers(t_data *data)
 {
 	int	i;
-	int	meals_finished;
 
 	i = 0;
 	data->start_time = operate_timer(OP_MSEC, data);
@@ -96,6 +49,13 @@ int	run_simulation(t_data *data)
 			run_routine(&data->philos[i]);
 		i++;
 	}
+}
+
+int	run_simulation(t_data *data)
+{
+	int	meals_finished;
+
+	start_philosophers(data);
 	if (data->input->meals_count != -1)
 	{
 		meals_finished = 0;

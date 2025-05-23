@@ -105,30 +105,25 @@ typedef struct s_data
 	bool		stat[STT_COUNT_DATA];
 }	t_data;
 
-// valid and init
-
 int		valid_args(int argc, char **argv);
 int		init_data(t_data *data, int argc, char **argv);
-
-// simulation
 
 int		run_simulation(t_data *data);
 void	*run_monitor(void *param);
 void	*run_routine(void *param);
-void	precise_sleep(long goal, t_data *data);
-
-// operators
 
 void	operate_mutex(t_mtx *mutex, t_operator opr, t_data *data);
 void	operate_thread(pthread_t *tid, t_operator opr, t_data *data, void *p);
 long	operate_timer(t_operator opr, t_data *data);
 
-// logger
-
 void	log_status(t_philo *philo, t_state state);
 int		log_error(int errcode, char *s1, char *s2, char *s3);
 
-// getset
+void	precise_sleep(long goal, t_data *data);
+int		error_exit(int errcode, t_data *data, char *msg);
+void	process_free(t_data *data);
+int		print_usage(int errcode);
+long	ft_atol(const char *str);
 
 void	set_finished(t_data *data);
 void	set_status(bool *dst, bool val, t_mtx *mutex, t_data *data);
@@ -136,19 +131,10 @@ bool	get_status(bool *val, t_mtx *mutex, t_data *data);
 void	set_timer(long *dst, long val, t_mtx *mutex, t_data *data);
 long	get_timer(long *val, t_mtx *mutex, t_data *data);
 
-// synchro
-
 void	threads_synchronized(t_data *data);
 void	threads_spinlocked(t_data *data);
 bool	process_finished(t_data *data);
 bool	process_failed(t_data *data);
 void	process_failure(t_data *data, int errcode);
-
-// utils
-
-int		print_usage(int errcode);
-long	ft_atol(const char *str);
-int		error_exit(int errcode, t_data *data, char *msg);
-void	process_free(t_data *data);
 
 #endif

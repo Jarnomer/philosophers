@@ -59,6 +59,7 @@ SOURCES := main \
            valid \
            init \
            simu \
+		   routine \
            opthread \
            opsemap \
            optimer \
