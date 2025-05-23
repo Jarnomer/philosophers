@@ -17,7 +17,7 @@ HEADERDIR := include
 BUILDDIR  := build
 BUILDLOG  := build.log
 
-TESTCASE  := ./$(NAME) 2 610 300 200 3
+TESTCASE  := ./$(NAME) 2 1000 200 200 2
 
 # **************************************************************************** #
 #    COMMANDS
@@ -35,6 +35,21 @@ CFLAGS     := -Wall -Werror -Wextra
 CPPFLAGS   := -c -MMD -MP
 DEBUGFLAGS := -g -fsanitize=address
 MAKEFLAGS  += --no-print-directory -j4
+
+# **************************************************************************** #
+#    VALGRIND
+# **************************************************************************** #
+
+LEAKSLOG := leaks.log
+VLGFLAGS := --leak-check=full \
+            --show-leak-kinds=all \
+            --track-origins=yes \
+            --trace-children=yes \
+            --verbose \
+            --log-file=$(LEAKSLOG)
+HELFLAGS := --tool=helgrind \
+            --verbose \
+            --log-file=$(LEAKSLOG)
 
 # **************************************************************************** #
 #    SOURCES
@@ -92,9 +107,13 @@ leaks: all
 	valgrind $(VLGFLAGS) $(TESTCASE)
 	$(call report_cmd, $(LEAKSLOG))
 
+races: all
+	valgrind $(HELFLAGS) $(TESTCASE)
+	$(call report_cmd, $(LEAKSLOG))
+
 define report_cmd
 	$(SCREENCLEAR)
-	cat $1 | tail -n +4 | cut --complement -d' ' -f1
+	sed -n '/ERROR SUMMARY/,$$p' $1 | cut --complement -d' ' -f1
 endef
 
 # **************************************************************************** #

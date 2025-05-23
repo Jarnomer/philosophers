@@ -31,10 +31,10 @@ void	precise_sleep(long target, t_data *data)
 	while (true)
 	{
 		if (process_finished(data) || process_failed(data))
-			break;
+			break ;
 		current = operate_timer(OP_MSEC, data);
 		if (current - start >= target)
-			break;
+			break ;
 		usleep(500);
 	}
 }

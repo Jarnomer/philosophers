@@ -84,7 +84,9 @@ int	run_simulation(t_data *data)
 {
 	init_mutexes(data);
 	init_threads(data);
+	operate_mutex(&data->mutex[MX_EPCH], OP_LOCK, data);
 	data->epoch = operate_timer(OP_MSEC, data);
+	operate_mutex(&data->mutex[MX_EPCH], OP_UNLOCK, data);
 	threads_synchronized(data);
 	join_threads(data);
 	destroy_mutexes(data);
