@@ -24,5 +24,5 @@ int	main(int argc, char **argv)
 		return (ERR_MEM);
 	if (run_simulation(&data) != 0)
 		return (data.exitcode);
-	return (NOERROR);
+	return (EXIT_SUCCESS);
 }

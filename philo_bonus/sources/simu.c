@@ -20,7 +20,7 @@ void	*run_monitor(void *arg)
 
 	philo = (t_philo *)arg;
 	data = philo->data;
-	while (1)
+	while (true)
 	{
 		current_time = operate_timer(OP_MSEC, data);
 		if (current_time - philo->last_meal > (long)data->input->time_to_die)
@@ -65,8 +65,11 @@ static void	run_routine(t_philo *philo)
 	philo->last_meal = operate_timer(OP_MSEC, data);
 	operate_thread(&philo->tid, OP_CREATE, data, philo);
 	if (philo->id % 2 == 0)
+	{
+		log_status(philo, ST_THK);
 		usleep(500);
-	while (1)
+	}
+	while (true)
 	{
 		eat_routine(philo, data);
 		log_status(philo, ST_SLP);
