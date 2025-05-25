@@ -61,7 +61,7 @@ static int	fill_input(t_input *input, int argc, char **argv)
 
 int	init_data(t_data *data, int argc, char **argv)
 {
-	int		philo_count;
+	int	philo_count;
 
 	memset(data, 0, sizeof(t_data));
 	data->input = malloc(sizeof(t_input));
@@ -73,6 +73,5 @@ int	init_data(t_data *data, int argc, char **argv)
 	if (!data->philos || !data->forks)
 		return (error_exit(ERR_MEM, data, MSG_MEM));
 	init_philosophers(data, philo_count);
-	data->exitcode = 0;
-	return (0);
+	return (data->exitcode);
 }

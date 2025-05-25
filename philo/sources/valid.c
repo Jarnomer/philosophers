@@ -35,16 +35,13 @@ long	ft_atol(const char *str)
 
 static int	valid_chars(const char *str)
 {
-	int	i;
-
 	if (!str || !*str)
 		return (-1);
-	i = 0;
-	while (str[i] != '\0')
+	while (*str)
 	{
-		if (!ft_isdigit(str[i]))
+		if (!ft_isdigit(*str))
 			return (-1);
-		i++;
+		str++;
 	}
 	return (0);
 }

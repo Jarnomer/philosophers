@@ -59,7 +59,7 @@ void	operate_mutex(t_mtx *mutex, t_operator opr, t_data *data)
 		err_chk(pthread_mutex_destroy(mutex), opr, data);
 	else
 	{
-		log_error(ERR_OPER, MSG_OPER, "<operate_mutex>", "");
+		log_error(ERR_OPER, MSG_OPER, "<operate_mutex> ", "");
 		process_failure(data, ERR_OPER);
 	}
 }

@@ -60,7 +60,7 @@ void	operate_thread(pthread_t *tid, t_operator opr, t_data *data, void *p)
 		err_chk(pthread_detach(*tid), opr, data);
 	else
 	{
-		log_error(ERR_OPER, MSG_OPER, "<operate_thread>", "");
+		log_error(ERR_OPER, MSG_OPER, "<operate_thread> ", "");
 		process_failure(data, ERR_OPER);
 	}
 }

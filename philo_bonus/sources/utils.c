@@ -28,7 +28,7 @@ void	precise_sleep(int target_time, t_data *data)
 	long	current;
 
 	start = operate_timer(OP_MSEC, data);
-	while (1)
+	while (true)
 	{
 		current = operate_timer(OP_MSEC, data);
 		if (current - start >= target_time)
@@ -39,7 +39,8 @@ void	precise_sleep(int target_time, t_data *data)
 
 void	error_exit(int errcode, t_data *data, char *msg)
 {
-	log_error(errcode, msg, "", "");
+	if (msg != NULL)
+		log_error(errcode, msg, "", "");
 	process_free(data);
 	exit(errcode);
 }

@@ -65,7 +65,7 @@ void	operate_semaphore(sem_t *sem, char *name, t_operator opr, t_data *data)
 		err_chk(sem_unlink(name), OP_UNLINK, data);
 	else
 	{
-		log_error(ERR_OPER, MSG_OPER, "<operate_semaphore>", "");
+		log_error(ERR_OPER, MSG_OPER, "<operate_semaphore> ", "");
 		error_exit(ERR_OPER, data, NULL);
 	}
 }

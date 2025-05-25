@@ -50,7 +50,8 @@ void	process_free(t_data *data)
 
 int	error_exit(int errcode, t_data *data, char *msg)
 {
-	log_error(errcode, msg, "", "");
+	if (msg != NULL)
+		log_error(errcode, msg, "", "");
 	process_free(data);
 	return (errcode);
 }
