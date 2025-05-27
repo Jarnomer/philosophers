@@ -145,7 +145,7 @@ clean:
 	$(call delete_cmd, $(BUILDDIR), $(BUILDLOG), $(LEAKSLOG))
 
 fclean: clean
-	$(call delete_cmd, $(NAME), $(BONUSBIN))
+	$(call delete_cmd, $(NAME))
 
 define delete_cmd
 	printf "$(R)$(B)Delete:$(T)$(Y)$1$2$3$4$5$(T)\n"
