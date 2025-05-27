@@ -176,7 +176,7 @@ $(foreach build, $(BUILDDIR), $(eval $(call build_cmd, $(build))))
 # **************************************************************************** #
 
 .PHONY: all re run nm
-.PHONY: debug leaks
+.PHONY: debug leaks races
 .PHONY: clean fclean
 
 .SILENT:
