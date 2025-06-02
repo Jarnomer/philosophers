@@ -41,15 +41,16 @@ MAKEFLAGS  += --no-print-directory -j4
 # **************************************************************************** #
 
 LEAKSLOG := leaks.log
-VLGFLAGS := --leak-check=full \
+VLGFLAGS := --log-file=$(LEAKSLOG) \
+            --leak-check=full \
             --show-leak-kinds=all \
             --track-origins=yes \
+            --track-fds=yes \
             --trace-children=yes \
+            --verbose
+HELFLAGS := --log-file=$(LEAKSLOG) \
+            --tool=helgrind \
             --verbose \
-            --log-file=$(LEAKSLOG)
-HELFLAGS := --tool=helgrind \
-            --verbose \
-            --log-file=$(LEAKSLOG)
 
 # **************************************************************************** #
 #    SOURCES
